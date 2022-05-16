@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>gitlab on 青木的博客</title>
-    <link>https://www.flysnow.org/tags/gitlab/</link>
+    <link>https://goudai.github.io/tags/gitlab/</link>
     <description>Recent content in gitlab on 青木的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 22 Jul 2019 12:43:16 +0000</lastBuildDate><atom:link href="https://www.flysnow.org/tags/gitlab/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 22 Jul 2019 12:43:16 +0000</lastBuildDate><atom:link href="https://goudai.github.io/tags/gitlab/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>搭建代码仓库gitlab服务器</title>
-      <link>https://www.flysnow.org/posts/Deploy-gitlab-server/</link>
+      <link>https://goudai.github.io/posts/Deploy-gitlab-server/</link>
       <pubDate>Mon, 22 Jul 2019 12:43:16 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Deploy-gitlab-server/</guid>
+      <guid>https://goudai.github.io/posts/Deploy-gitlab-server/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;本章节讨论&lt;/p&gt;
 &lt;ol&gt;

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>docker on 青木的博客</title>
-    <link>https://www.flysnow.org/tags/docker/</link>
+    <link>https://goudai.github.io/tags/docker/</link>
     <description>Recent content in docker on 青木的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 17 Dec 2018 00:29:02 +0000</lastBuildDate><atom:link href="https://www.flysnow.org/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 17 Dec 2018 00:29:02 +0000</lastBuildDate><atom:link href="https://goudai.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>容器中的JVM资源该如何被安全的限制？</title>
-      <link>https://www.flysnow.org/posts/How-to-securely-limit-JVM-resources-in-a-container/</link>
+      <link>https://goudai.github.io/posts/How-to-securely-limit-JVM-resources-in-a-container/</link>
       <pubDate>Mon, 17 Dec 2018 00:29:02 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/How-to-securely-limit-JVM-resources-in-a-container/</guid>
+      <guid>https://goudai.github.io/posts/How-to-securely-limit-JVM-resources-in-a-container/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;Java与Docker的结合，虽然更好的解决了application的封装问题。但也存在着不兼容，比如Java并不能自动的发现Docker设置的内存限制,CPU限制。
 &lt;!-- raw HTML omitted --&gt;这将导致JVM不能稳定服务业务！&lt;!-- raw HTML omitted --&gt;容器会杀死你JVM进程，而健康检查又将拉起你的JVM进程，进而导致你监控你的pod一天重启次数甚至能达到几百次。 &lt;!-- raw HTML omitted --&gt;
@@ -22,10 +22,10 @@
     
     <item>
       <title>如何构建SpringBoot的Docker镜像</title>
-      <link>https://www.flysnow.org/posts/How-to-run-springcloud-in-docker/</link>
+      <link>https://goudai.github.io/posts/How-to-run-springcloud-in-docker/</link>
       <pubDate>Tue, 07 Aug 2018 21:21:18 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/How-to-run-springcloud-in-docker/</guid>
+      <guid>https://goudai.github.io/posts/How-to-run-springcloud-in-docker/</guid>
       <description>&lt;h1 id=&#34;目标&#34;&gt;目标&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;自定义Dockerfile构建一个生产可用的jre base image&lt;/li&gt;

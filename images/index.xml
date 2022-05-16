@@ -2,26 +2,26 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Images on 青木的博客</title>
-    <link>https://www.flysnow.org/images/</link>
+    <link>https://goudai.github.io/images/</link>
     <description>Recent content in Images on 青木的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 26 Sep 2018 15:48:32 +0000</lastBuildDate><atom:link href="https://www.flysnow.org/images/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 26 Sep 2018 15:48:32 +0000</lastBuildDate><atom:link href="https://goudai.github.io/images/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>jvm options</title>
-      <link>https://www.flysnow.org/images/jvm-options/</link>
+      <link>https://goudai.github.io/images/jvm-options/</link>
       <pubDate>Wed, 26 Sep 2018 15:48:32 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/images/jvm-options/</guid>
+      <guid>https://goudai.github.io/images/jvm-options/</guid>
       <description>https://chriswhocodes.com/hotspot_option_differences.html UseContainerSupport 由于busybox的ps 导致依赖组件有点小瑕疵所以需要update一下ps的依赖 1 2 3 4 5 6 7 8 9 10 ps: unrecognized option: p BusyBox v1.28.4 (2018-05-30 10:45:57 UTC) multi-call binary. Usage: ps [-o COL1,COL2=HEADER] Show list of processes -o COL1,COL2=HEADER Select columns for display The target pid (11) does not exist! 执行下面命令修复 1 apk add --update procps 如果需要用到telnet 则需要安装一下 busybox-extras 1 apk add busybox-extras</description>
     </item>
     
     <item>
       <title>如何构建springcloud微服务中的异常处理体系</title>
-      <link>https://www.flysnow.org/images/How-to-handle-exceptions-gracefully-in-springcloud/</link>
+      <link>https://goudai.github.io/images/How-to-handle-exceptions-gracefully-in-springcloud/</link>
       <pubDate>Mon, 20 Aug 2018 19:18:33 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/images/How-to-handle-exceptions-gracefully-in-springcloud/</guid>
+      <guid>https://goudai.github.io/images/How-to-handle-exceptions-gracefully-in-springcloud/</guid>
       <description>&lt;h1 id=&#34;需求&#34;&gt;需求&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;对于我们的任何系统而言一般分为正常的业务流程和异常业务流程&lt;/li&gt;

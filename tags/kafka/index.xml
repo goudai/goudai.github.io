@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>kafka on 青木的博客</title>
-    <link>https://www.flysnow.org/tags/kafka/</link>
+    <link>https://goudai.github.io/tags/kafka/</link>
     <description>Recent content in kafka on 青木的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sun, 21 Oct 2018 10:28:37 +0000</lastBuildDate><atom:link href="https://www.flysnow.org/tags/kafka/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 21 Oct 2018 10:28:37 +0000</lastBuildDate><atom:link href="https://goudai.github.io/tags/kafka/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>记Kafka的一个BUG，导致整个集群不能工作</title>
-      <link>https://www.flysnow.org/posts/Kafka-bug-Cached-zkVersion-not-equal-to-that-in-zookeeper-broker-not-recovering/</link>
+      <link>https://goudai.github.io/posts/Kafka-bug-Cached-zkVersion-not-equal-to-that-in-zookeeper-broker-not-recovering/</link>
       <pubDate>Sun, 21 Oct 2018 10:28:37 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Kafka-bug-Cached-zkVersion-not-equal-to-that-in-zookeeper-broker-not-recovering/</guid>
+      <guid>https://goudai.github.io/posts/Kafka-bug-Cached-zkVersion-not-equal-to-that-in-zookeeper-broker-not-recovering/</guid>
       <description>&lt;p&gt;KAFKA 2.2.0 bug
 &lt;a href=&#34;https://issues.apache.org/jira/browse/KAFKA-8052&#34;&gt;https://issues.apache.org/jira/browse/KAFKA-8052&lt;/a&gt;&lt;/p&gt;</description>
     </item>

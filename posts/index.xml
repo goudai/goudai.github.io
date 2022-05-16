@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on 青木的博客</title>
-    <link>https://www.flysnow.org/posts/</link>
+    <link>https://goudai.github.io/posts/</link>
     <description>Recent content in Posts on 青木的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 08 Apr 2020 16:00:09 +0000</lastBuildDate><atom:link href="https://www.flysnow.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 08 Apr 2020 16:00:09 +0000</lastBuildDate><atom:link href="https://goudai.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>使用Spring Boot Operator部署SpringBoot到K8S</title>
-      <link>https://www.flysnow.org/posts/Spring-Boot-Operator-User-Guide/</link>
+      <link>https://goudai.github.io/posts/Spring-Boot-Operator-User-Guide/</link>
       <pubDate>Wed, 08 Apr 2020 16:00:09 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Spring-Boot-Operator-User-Guide/</guid>
+      <guid>https://goudai.github.io/posts/Spring-Boot-Operator-User-Guide/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;在Kubernetes中部署spring boot应用整体上来说是一件比较繁琐的事情，而&lt;a href=&#34;https://github.com/goudai/spring-boot-operator&#34;&gt;Spring Boot Operator&lt;/a&gt;则能带给你更清爽简单的体验。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/goudai/spring-boot-operator&#34;&gt;Spring Boot Operator&lt;/a&gt;基于Kubernetes的&lt;a href=&#34;https://kubernetes.io/docs/tasks/access-kubernetes-api/extend-api-custom-resource-definitions&#34;&gt;custom resource definitions (CRDs)&lt;/a&gt;扩展API进行的开发。&lt;/p&gt;</description>
@@ -20,10 +20,10 @@
     
     <item>
       <title>Prometheus Operator监控ETCD</title>
-      <link>https://www.flysnow.org/posts/Monitor-ETCD/</link>
+      <link>https://goudai.github.io/posts/Monitor-ETCD/</link>
       <pubDate>Mon, 02 Sep 2019 14:04:35 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Monitor-ETCD/</guid>
+      <guid>https://goudai.github.io/posts/Monitor-ETCD/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;在前面的文章&lt;a href=&#34;https://qingmu.io/2019/08/30/Customize-your-kube-prometheus/&#34;&gt;优雅的使用Prometheus Operator&lt;/a&gt;中我们搭建好了基础的监控平台和图表.
 现在我们可以将etcd也纳入监控范围内了。&lt;/p&gt;</description>
@@ -31,10 +31,10 @@
     
     <item>
       <title>Prometheus Operator监控SpringCloud</title>
-      <link>https://www.flysnow.org/posts/Monitor-springboot-microservices/</link>
+      <link>https://goudai.github.io/posts/Monitor-springboot-microservices/</link>
       <pubDate>Sun, 01 Sep 2019 22:18:47 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Monitor-springboot-microservices/</guid>
+      <guid>https://goudai.github.io/posts/Monitor-springboot-microservices/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;在上一篇文章&lt;a href=&#34;https://qingmu.io/2019/08/30/Customize-your-kube-prometheus/&#34;&gt;优雅的使用Prometheus Operator&lt;/a&gt;中我们搭建起来了监控的基础堆栈。下来我们来监控我们的业务服务。&lt;/li&gt;
@@ -44,10 +44,10 @@
     
     <item>
       <title>优雅的使用Prometheus Operator</title>
-      <link>https://www.flysnow.org/posts/Customize-your-kube-prometheus/</link>
+      <link>https://goudai.github.io/posts/Customize-your-kube-prometheus/</link>
       <pubDate>Fri, 30 Aug 2019 22:09:34 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Customize-your-kube-prometheus/</guid>
+      <guid>https://goudai.github.io/posts/Customize-your-kube-prometheus/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;为了方便大家使用prometheus，&lt;code&gt;Coreos&lt;/code&gt;出了提供了一个Operator&lt;a href=&#34;https://github.com/coreos/prometheus-operator&#34;&gt;Prometheus Operator&lt;/a&gt;，而为了方便大家一站式的监控方案就有了项目&lt;a href=&#34;https://github.com/coreos/kube-prometheus&#34;&gt;kube-prometheus&lt;/a&gt;是一个脚本项目，它主要使用&lt;code&gt;jsonnet&lt;/code&gt;写成，其作用呢就是模板+参数然后渲染出yaml文件集，主要是作用是提供一个开箱即用的监控栈，用于kubernetes集群的监控和应用程序的监控。
 这个项目主要包括以下软件栈&lt;/p&gt;
@@ -69,20 +69,20 @@
     
     <item>
       <title>部署业务并使用Feign进行服务间调用（附带一部分源码分析）</title>
-      <link>https://www.flysnow.org/posts/Run-the-business-service-to-complete-the-service-call-using-Feign/</link>
+      <link>https://goudai.github.io/posts/Run-the-business-service-to-complete-the-service-call-using-Feign/</link>
       <pubDate>Fri, 16 Aug 2019 20:51:07 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Run-the-business-service-to-complete-the-service-call-using-Feign/</guid>
+      <guid>https://goudai.github.io/posts/Run-the-business-service-to-complete-the-service-call-using-Feign/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;在前面我们搭建起来了&lt;a href=&#34;https://qingmu.io/2019/08/07/Run-eureka-cluster-on-kubernetes/&#34;&gt;eureka&lt;/a&gt;,和&lt;a href=&#34;https://qingmu.io/2019/08/09/Run-the-configuration-hub-cluster-on-kubernetes/&#34;&gt;配置中心&lt;/a&gt;，基于这两者我们就能愉快的写业务代码了。这章节我们看下怎么业务服务和业务服务直接如何完成调用。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>从部署mysql聊一聊有状态服务和PV及PVC</title>
-      <link>https://www.flysnow.org/posts/Run-mysql-on-kubernetes/</link>
+      <link>https://goudai.github.io/posts/Run-mysql-on-kubernetes/</link>
       <pubDate>Sun, 11 Aug 2019 22:25:50 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Run-mysql-on-kubernetes/</guid>
+      <guid>https://goudai.github.io/posts/Run-mysql-on-kubernetes/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;部署mysql之前我们需要先了解一个概念&lt;code&gt;有状态服务&lt;/code&gt;。这是一种特殊的服务，简单的归纳下就是会产生需要持久化的数据，并且有很强的I/O需求，且重启需要依赖上次存储到磁盘的数据。如典型的mysql，kafka，zookeeper等等。&lt;/p&gt;
 &lt;p&gt;在我们有比较优秀的商业存储的前提下，灰常推荐使用&lt;code&gt;有状态服务&lt;/code&gt;进行部署，计算和存储分离那是相当的爽的。在实际生产中如果没有这种存储，才有localPV也是不错的选择，当然local pv其实呢和hostPath是一样的。当然我们在开发测试环境也是可以自己搭建一套简单的如NFS服务，来享受存储和计算分离的爽快感。&lt;/p&gt;
@@ -91,10 +91,10 @@
     
     <item>
       <title>在kubernetes运行分布式追踪zipkin</title>
-      <link>https://www.flysnow.org/posts/Run-distributed-trace-zipkin-in-kubernetes/</link>
+      <link>https://goudai.github.io/posts/Run-distributed-trace-zipkin-in-kubernetes/</link>
       <pubDate>Sat, 10 Aug 2019 20:27:39 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Run-distributed-trace-zipkin-in-kubernetes/</guid>
+      <guid>https://goudai.github.io/posts/Run-distributed-trace-zipkin-in-kubernetes/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;&lt;a href=&#34;https://zipkin.io&#34;&gt;Zipkin&lt;/a&gt;是一个开放&lt;a href=&#34;https://github.com/openzipkin/zipkin&#34;&gt;源代码&lt;/a&gt;分布式的跟踪系统，每个服务向zipkin报告计时数据，zipkin会根据调用关系通过Zipkin UI生成依赖关系图。简单的来说就是个http服务器
 它支持多种后端存储（&amp;ldquo;cassandra&amp;rdquo;,&amp;ldquo;mysql&amp;rdquo;,&amp;ldquo;elasticsearch&amp;rdquo;）持久化客户端推送过来的数据.&lt;/p&gt;</description>
@@ -102,10 +102,10 @@
     
     <item>
       <title>在kubernetes上运行SpringCloud配置中心</title>
-      <link>https://www.flysnow.org/posts/Run-the-configuration-hub-cluster-on-kubernetes/</link>
+      <link>https://goudai.github.io/posts/Run-the-configuration-hub-cluster-on-kubernetes/</link>
       <pubDate>Fri, 09 Aug 2019 23:52:56 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Run-the-configuration-hub-cluster-on-kubernetes/</guid>
+      <guid>https://goudai.github.io/posts/Run-the-configuration-hub-cluster-on-kubernetes/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;在分布式系统中，我们的配置管理起来是很麻烦的一件事儿，特别是在如果没有配置中心的时候。在我们java开发中，一般而言会将敏感配置信息（如DB的user，password），数据库的地址，redis地址等等，
 一系列配置信息和项目代码解耦，根据每个环境单独配置，这样一来是方便不需要改代码，也不需要在项目中冗余多份，二来是更加的安全。那么分离之后我们将面临的问题是怎么读取这个配置文件：&lt;/p&gt;</description>
@@ -113,10 +113,10 @@
     
     <item>
       <title>在kubernetes上运行eureka集群</title>
-      <link>https://www.flysnow.org/posts/Run-eureka-cluster-on-kubernetes/</link>
+      <link>https://goudai.github.io/posts/Run-eureka-cluster-on-kubernetes/</link>
       <pubDate>Wed, 07 Aug 2019 22:49:20 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Run-eureka-cluster-on-kubernetes/</guid>
+      <guid>https://goudai.github.io/posts/Run-eureka-cluster-on-kubernetes/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;eureka 在springcloud体系中，主要实现一个注册中心的角色，所有的服务都将注册到eureke中，调用用者将从这里通过名称获取到对应的服务的IP集合列表。
 作为一个分布式系统eureka在CAP中，选中了AP，优先保证可用性，放弃了强一致性，这样设计也符合注册中心的需要。
@@ -125,20 +125,20 @@
     
     <item>
       <title>在kubernetes上运行Spring Cloud Gateway（二）</title>
-      <link>https://www.flysnow.org/posts/Run-Spring-Cloud-Gateway-on-kubernetes-2/</link>
+      <link>https://goudai.github.io/posts/Run-Spring-Cloud-Gateway-on-kubernetes-2/</link>
       <pubDate>Wed, 07 Aug 2019 12:25:41 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Run-Spring-Cloud-Gateway-on-kubernetes-2/</guid>
+      <guid>https://goudai.github.io/posts/Run-Spring-Cloud-Gateway-on-kubernetes-2/</guid>
       <description>&lt;p&gt;在&lt;a href=&#34;https://qingmu.io/2019/08/06/Run-Spring-Cloud-Gateway-on-kubernetes/&#34;&gt;https://qingmu.io/2019/08/06/Run-Spring-Cloud-Gateway-on-kubernetes/&lt;/a&gt;文章中，我们搭建好了基本的网关的架子。这篇文章中
 我们继续剩下的部分，将网关和部署到k8s中，并结合&lt;code&gt;Ingress&lt;/code&gt;完成域名访问我们的网关，通过&lt;code&gt;Secret&lt;/code&gt;完成网关HTTPS的安全加密。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>在kubernetes上运行Spring Cloud Gateway（一）</title>
-      <link>https://www.flysnow.org/posts/Run-Spring-Cloud-Gateway-on-kubernetes/</link>
+      <link>https://goudai.github.io/posts/Run-Spring-Cloud-Gateway-on-kubernetes/</link>
       <pubDate>Tue, 06 Aug 2019 17:43:36 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Run-Spring-Cloud-Gateway-on-kubernetes/</guid>
+      <guid>https://goudai.github.io/posts/Run-Spring-Cloud-Gateway-on-kubernetes/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;[https://github.com/spring-cloud/spring-cloud-gateway](Spring Cloud Gateway)是Spring Cloud官方推出的一个网关项目，主要是基于&lt;a href=&#34;https://github.com/reactor/reactor-netty&#34;&gt;reactor-netty&lt;/a&gt;实现。网关在微服务系统主要充当了一个入口&amp;quot;门&amp;quot;的作用，所有的IN/OUT都需要经过这一道门，才能访问到微服务池子中的功能api。
 这样的设计方便了我们对业务功能的保护api资源的保护，我们可以在这里灵活的控制对外开放的API集合，而这些API集合就构成了我们的&lt;code&gt;&amp;quot;系统&amp;quot;&lt;/code&gt;。&lt;/p&gt;
@@ -149,39 +149,39 @@
     
     <item>
       <title>动手修改kubeam生成证书有效期为100年</title>
-      <link>https://www.flysnow.org/posts/Hands-on-modification-of-the-validity-period-of-the-kubeam-generation-certificate/</link>
+      <link>https://goudai.github.io/posts/Hands-on-modification-of-the-validity-period-of-the-kubeam-generation-certificate/</link>
       <pubDate>Thu, 01 Aug 2019 23:33:40 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Hands-on-modification-of-the-validity-period-of-the-kubeam-generation-certificate/</guid>
+      <guid>https://goudai.github.io/posts/Hands-on-modification-of-the-validity-period-of-the-kubeam-generation-certificate/</guid>
       <description>&lt;p&gt;这里我们已v1.14.4的源代码为基础。
 首先需要下载&lt;a href=&#34;https://github.com/kubernetes/kubernetes/archive/v1.14.4.tar.gz&#34;&gt;kubernetesv1.14.4&lt;/a&gt;到本地，并导入到goland，方便我们进行改。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>在kubernetes上运行elasticsearch集群</title>
-      <link>https://www.flysnow.org/posts/Deploy-Elasticsearch-Cluster-on-kubernetes/</link>
+      <link>https://goudai.github.io/posts/Deploy-Elasticsearch-Cluster-on-kubernetes/</link>
       <pubDate>Thu, 01 Aug 2019 14:03:40 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Deploy-Elasticsearch-Cluster-on-kubernetes/</guid>
+      <guid>https://goudai.github.io/posts/Deploy-Elasticsearch-Cluster-on-kubernetes/</guid>
       <description>&lt;p&gt;像elasticsearch这种应用属于重度依赖IO，依赖磁盘，对磁盘敏感的应用，如果采用分布式文件系统（NFS/GlusterFS等）来进行数据的存储，对ES的性能会造成很大的影响。
 elasticsearch是具有状态的应用，我们可以采用两种方式部署，STS+LocalPV 或者是Deployment+NodeSelector+HostPath 的方式进行部署，本质上来说两者区别不大。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>在kubernetes上部署分布式日志系统EFK（7.x)</title>
-      <link>https://www.flysnow.org/posts/Deploy-distributed-log-system-EFK-on-kubernetes/</link>
+      <link>https://goudai.github.io/posts/Deploy-distributed-log-system-EFK-on-kubernetes/</link>
       <pubDate>Thu, 01 Aug 2019 14:01:31 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Deploy-distributed-log-system-EFK-on-kubernetes/</guid>
+      <guid>https://goudai.github.io/posts/Deploy-distributed-log-system-EFK-on-kubernetes/</guid>
       <description></description>
     </item>
     
     <item>
       <title>搭建代码仓库gitlab服务器</title>
-      <link>https://www.flysnow.org/posts/Deploy-gitlab-server/</link>
+      <link>https://goudai.github.io/posts/Deploy-gitlab-server/</link>
       <pubDate>Mon, 22 Jul 2019 12:43:16 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Deploy-gitlab-server/</guid>
+      <guid>https://goudai.github.io/posts/Deploy-gitlab-server/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;本章节讨论&lt;/p&gt;
 &lt;ol&gt;
@@ -192,10 +192,10 @@ elasticsearch是具有状态的应用，我们可以采用两种方式部署，S
     
     <item>
       <title>Java code layering</title>
-      <link>https://www.flysnow.org/posts/Java-code-layering/</link>
+      <link>https://goudai.github.io/posts/Java-code-layering/</link>
       <pubDate>Sat, 20 Jul 2019 17:43:44 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Java-code-layering/</guid>
+      <guid>https://goudai.github.io/posts/Java-code-layering/</guid>
       <description>&lt;p&gt;一下是一个典型的java微服务项目的代码调用结构，分层次的目的在于&lt;code&gt;解耦合&lt;/code&gt;，&lt;code&gt;内聚变化&lt;/code&gt;，&lt;code&gt;减少重复代码&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;为了达到解开的目的我们会采用&lt;code&gt;Pojos&lt;/code&gt;来对每层之间的输入输出进行隔离，以期望，如，对视图的改动，格式化，等等不会对业务产生太大影响，为此我们会产生以下对象：&lt;/p&gt;
 &lt;ul&gt;
@@ -220,10 +220,10 @@ elasticsearch是具有状态的应用，我们可以采用两种方式部署，S
     
     <item>
       <title>部署kubernetes相关插件</title>
-      <link>https://www.flysnow.org/posts/Deploy-kubernetes-network-plugin/</link>
+      <link>https://goudai.github.io/posts/Deploy-kubernetes-network-plugin/</link>
       <pubDate>Sat, 01 Jun 2019 23:19:35 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Deploy-kubernetes-network-plugin/</guid>
+      <guid>https://goudai.github.io/posts/Deploy-kubernetes-network-plugin/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;在&lt;a href=&#34;https://qingmu.io/2018/12/20/Deploy-a-highly-available-cluster-with-kubeadm/&#34;&gt;上一篇&lt;/a&gt;中我们完成了kubernetes的高可用集群的搭建，但我们搭建出来的集群状态均显示都是&lt;code&gt;Not Ready&lt;/code&gt;，这背后的原因是由于我们的
 集群网络并没打通，本文我们将接着上文继续往下中，完成我们的集群网络插件的安装与部署。&lt;/p&gt;
@@ -252,10 +252,10 @@ elasticsearch是具有状态的应用，我们可以采用两种方式部署，S
     
     <item>
       <title>在阿里云的VPC部署高可用kubernetes</title>
-      <link>https://www.flysnow.org/posts/Deploy-a-highly-available-cluster-with-kubeadm/</link>
+      <link>https://goudai.github.io/posts/Deploy-a-highly-available-cluster-with-kubeadm/</link>
       <pubDate>Fri, 17 May 2019 20:47:35 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Deploy-a-highly-available-cluster-with-kubeadm/</guid>
+      <guid>https://goudai.github.io/posts/Deploy-a-highly-available-cluster-with-kubeadm/</guid>
       <description>&lt;h1 id=&#34;kubernetes的基本概念&#34;&gt;kubernetes的基本概念&lt;/h1&gt;
 &lt;h1 id=&#34;font-colorred写在前面的话font&#34;&gt;&lt;!-- raw HTML omitted --&gt;写在前面的话&lt;!-- raw HTML omitted --&gt;&lt;/h1&gt;
 &lt;p&gt;整个安装过程中尽量不要出现写死的IP的情况出现，尽量全部使用域名代替IP。
@@ -267,20 +267,20 @@ elasticsearch是具有状态的应用，我们可以采用两种方式部署，S
     
     <item>
       <title>Spring Gateway syscall:read(..) Connection reset by peer</title>
-      <link>https://www.flysnow.org/posts/HAProxy-Spring-Gateway-Connection-reset-by-peer/</link>
+      <link>https://goudai.github.io/posts/HAProxy-Spring-Gateway-Connection-reset-by-peer/</link>
       <pubDate>Thu, 10 Jan 2019 17:50:05 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/HAProxy-Spring-Gateway-Connection-reset-by-peer/</guid>
+      <guid>https://goudai.github.io/posts/HAProxy-Spring-Gateway-Connection-reset-by-peer/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;最近花了一段时间完成了从zuul迁移到&lt;code&gt;Spring Cloud Gateway&lt;/code&gt;的工作，记录一下遇到的一个问题。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>容器中的JVM资源该如何被安全的限制？</title>
-      <link>https://www.flysnow.org/posts/How-to-securely-limit-JVM-resources-in-a-container/</link>
+      <link>https://goudai.github.io/posts/How-to-securely-limit-JVM-resources-in-a-container/</link>
       <pubDate>Mon, 17 Dec 2018 00:29:02 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/How-to-securely-limit-JVM-resources-in-a-container/</guid>
+      <guid>https://goudai.github.io/posts/How-to-securely-limit-JVM-resources-in-a-container/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;Java与Docker的结合，虽然更好的解决了application的封装问题。但也存在着不兼容，比如Java并不能自动的发现Docker设置的内存限制,CPU限制。
 &lt;!-- raw HTML omitted --&gt;这将导致JVM不能稳定服务业务！&lt;!-- raw HTML omitted --&gt;容器会杀死你JVM进程，而健康检查又将拉起你的JVM进程，进而导致你监控你的pod一天重启次数甚至能达到几百次。 &lt;!-- raw HTML omitted --&gt;
@@ -290,10 +290,10 @@ elasticsearch是具有状态的应用，我们可以采用两种方式部署，S
     
     <item>
       <title>Zuul源码分析(2)Filter分析</title>
-      <link>https://www.flysnow.org/posts/Zuul-processing-flow-and-business-extension-point-2/</link>
+      <link>https://goudai.github.io/posts/Zuul-processing-flow-and-business-extension-point-2/</link>
       <pubDate>Mon, 26 Nov 2018 23:19:17 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Zuul-processing-flow-and-business-extension-point-2/</guid>
+      <guid>https://goudai.github.io/posts/Zuul-processing-flow-and-business-extension-point-2/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;在&lt;a href=&#34;https://qingmu.io/2018/11/15/Zuul-processing-flow-and-business-extension-point/&#34;&gt;前一篇&lt;/a&gt;文件中我们分析了zuul对Filter请求了不同的阶段划分了多个生命周期即FilterType。接下来我们继续分析每一个FilterType的具体的Filter有哪些，他们都干了什么。&lt;/p&gt;
 &lt;h1 id=&#34;zuulfilters运行流程图&#34;&gt;ZuulFilters运行流程图&lt;/h1&gt;
@@ -304,10 +304,10 @@ elasticsearch是具有状态的应用，我们可以采用两种方式部署，S
     
     <item>
       <title>Zuul源码分析(1)生命周期</title>
-      <link>https://www.flysnow.org/posts/Zuul-processing-flow-and-business-extension-point/</link>
+      <link>https://goudai.github.io/posts/Zuul-processing-flow-and-business-extension-point/</link>
       <pubDate>Thu, 15 Nov 2018 23:19:17 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Zuul-processing-flow-and-business-extension-point/</guid>
+      <guid>https://goudai.github.io/posts/Zuul-processing-flow-and-business-extension-point/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;Zuul在&lt;code&gt;Spring Cloud Netfilx&lt;/code&gt; 体系中扮演着接入者网关的角色。&lt;/li&gt;
@@ -318,10 +318,10 @@ elasticsearch是具有状态的应用，我们可以采用两种方式部署，S
     
     <item>
       <title>如何监控springboot应用</title>
-      <link>https://www.flysnow.org/posts/How-to-monitor-springboot-application/</link>
+      <link>https://goudai.github.io/posts/How-to-monitor-springboot-application/</link>
       <pubDate>Tue, 13 Nov 2018 23:43:52 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/How-to-monitor-springboot-application/</guid>
+      <guid>https://goudai.github.io/posts/How-to-monitor-springboot-application/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;对于整个微服务系统而言。一套及时的报警通知，可视化监控，是必不可少的。&lt;/li&gt;
@@ -330,10 +330,10 @@ elasticsearch是具有状态的应用，我们可以采用两种方式部署，S
     
     <item>
       <title>记SpringCloud 1.X 升级到2.x</title>
-      <link>https://www.flysnow.org/posts/How-to-upgrade-SpringCloud1-x-to-2-x/</link>
+      <link>https://goudai.github.io/posts/How-to-upgrade-SpringCloud1-x-to-2-x/</link>
       <pubDate>Wed, 31 Oct 2018 13:32:01 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/How-to-upgrade-SpringCloud1-x-to-2-x/</guid>
+      <guid>https://goudai.github.io/posts/How-to-upgrade-SpringCloud1-x-to-2-x/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;前后花了两周多个时间完成了 &lt;code&gt;Spring Boot 1.5.6.RELEASE &amp;amp; Spring Cloud Dalston.SR4&lt;/code&gt;  升级到 &lt;code&gt;Spring Boot 2.0.6.RELEASE &amp;amp; Spring Cloud Finchley.SR2 &amp;amp; spring-cloud-netflix  2.0.2.RELEASE&lt;/code&gt; 的工作。&lt;/li&gt;
@@ -343,20 +343,20 @@ elasticsearch是具有状态的应用，我们可以采用两种方式部署，S
     
     <item>
       <title>记Kafka的一个BUG，导致整个集群不能工作</title>
-      <link>https://www.flysnow.org/posts/Kafka-bug-Cached-zkVersion-not-equal-to-that-in-zookeeper-broker-not-recovering/</link>
+      <link>https://goudai.github.io/posts/Kafka-bug-Cached-zkVersion-not-equal-to-that-in-zookeeper-broker-not-recovering/</link>
       <pubDate>Sun, 21 Oct 2018 10:28:37 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Kafka-bug-Cached-zkVersion-not-equal-to-that-in-zookeeper-broker-not-recovering/</guid>
+      <guid>https://goudai.github.io/posts/Kafka-bug-Cached-zkVersion-not-equal-to-that-in-zookeeper-broker-not-recovering/</guid>
       <description>&lt;p&gt;KAFKA 2.2.0 bug
 &lt;a href=&#34;https://issues.apache.org/jira/browse/KAFKA-8052&#34;&gt;https://issues.apache.org/jira/browse/KAFKA-8052&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>如何构建SpringBoot的Docker镜像</title>
-      <link>https://www.flysnow.org/posts/How-to-run-springcloud-in-docker/</link>
+      <link>https://goudai.github.io/posts/How-to-run-springcloud-in-docker/</link>
       <pubDate>Tue, 07 Aug 2018 21:21:18 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/How-to-run-springcloud-in-docker/</guid>
+      <guid>https://goudai.github.io/posts/How-to-run-springcloud-in-docker/</guid>
       <description>&lt;h1 id=&#34;目标&#34;&gt;目标&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;自定义Dockerfile构建一个生产可用的jre base image&lt;/li&gt;
@@ -367,10 +367,10 @@ elasticsearch是具有状态的应用，我们可以采用两种方式部署，S
     
     <item>
       <title>扩展spring-cloud-ribbon支持灰度</title>
-      <link>https://www.flysnow.org/posts/Extended-spring-cloud-ribbon-supports-grayscale/</link>
+      <link>https://goudai.github.io/posts/Extended-spring-cloud-ribbon-supports-grayscale/</link>
       <pubDate>Tue, 07 Aug 2018 12:42:47 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Extended-spring-cloud-ribbon-supports-grayscale/</guid>
+      <guid>https://goudai.github.io/posts/Extended-spring-cloud-ribbon-supports-grayscale/</guid>
       <description>&lt;h1 id=&#34;目标&#34;&gt;目标&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;扩展ribbon完成灰度调用&lt;/li&gt;
@@ -384,10 +384,10 @@ elasticsearch是具有状态的应用，我们可以采用两种方式部署，S
     
     <item>
       <title>kubernetes全自动弹性伸缩组件</title>
-      <link>https://www.flysnow.org/posts/kubernetes-metrics-server/</link>
+      <link>https://goudai.github.io/posts/kubernetes-metrics-server/</link>
       <pubDate>Thu, 02 Aug 2018 12:02:42 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/kubernetes-metrics-server/</guid>
+      <guid>https://goudai.github.io/posts/kubernetes-metrics-server/</guid>
       <description>&lt;h1 id=&#34;目标&#34;&gt;目标&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;使用容器完成 metrics-server 部署&lt;/li&gt;

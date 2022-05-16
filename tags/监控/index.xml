@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>监控 on 青木的博客</title>
-    <link>https://www.flysnow.org/tags/%E7%9B%91%E6%8E%A7/</link>
+    <link>https://goudai.github.io/tags/%E7%9B%91%E6%8E%A7/</link>
     <description>Recent content in 监控 on 青木的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 13 Nov 2018 23:43:52 +0000</lastBuildDate><atom:link href="https://www.flysnow.org/tags/%E7%9B%91%E6%8E%A7/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 13 Nov 2018 23:43:52 +0000</lastBuildDate><atom:link href="https://goudai.github.io/tags/%E7%9B%91%E6%8E%A7/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>如何监控springboot应用</title>
-      <link>https://www.flysnow.org/posts/How-to-monitor-springboot-application/</link>
+      <link>https://goudai.github.io/posts/How-to-monitor-springboot-application/</link>
       <pubDate>Tue, 13 Nov 2018 23:43:52 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/How-to-monitor-springboot-application/</guid>
+      <guid>https://goudai.github.io/posts/How-to-monitor-springboot-application/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;对于整个微服务系统而言。一套及时的报警通知，可视化监控，是必不可少的。&lt;/li&gt;

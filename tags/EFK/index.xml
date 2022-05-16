@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>EFK on 青木的博客</title>
-    <link>https://www.flysnow.org/tags/EFK/</link>
+    <link>https://goudai.github.io/tags/EFK/</link>
     <description>Recent content in EFK on 青木的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Thu, 01 Aug 2019 14:01:31 +0000</lastBuildDate><atom:link href="https://www.flysnow.org/tags/EFK/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 01 Aug 2019 14:01:31 +0000</lastBuildDate><atom:link href="https://goudai.github.io/tags/EFK/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>在kubernetes上部署分布式日志系统EFK（7.x)</title>
-      <link>https://www.flysnow.org/posts/Deploy-distributed-log-system-EFK-on-kubernetes/</link>
+      <link>https://goudai.github.io/posts/Deploy-distributed-log-system-EFK-on-kubernetes/</link>
       <pubDate>Thu, 01 Aug 2019 14:01:31 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Deploy-distributed-log-system-EFK-on-kubernetes/</guid>
+      <guid>https://goudai.github.io/posts/Deploy-distributed-log-system-EFK-on-kubernetes/</guid>
       <description></description>
     </item>
     

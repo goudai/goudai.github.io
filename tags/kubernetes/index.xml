@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>kubernetes on 青木的博客</title>
-    <link>https://www.flysnow.org/tags/kubernetes/</link>
+    <link>https://goudai.github.io/tags/kubernetes/</link>
     <description>Recent content in kubernetes on 青木的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 08 Apr 2020 16:00:09 +0000</lastBuildDate><atom:link href="https://www.flysnow.org/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 08 Apr 2020 16:00:09 +0000</lastBuildDate><atom:link href="https://goudai.github.io/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>使用Spring Boot Operator部署SpringBoot到K8S</title>
-      <link>https://www.flysnow.org/posts/Spring-Boot-Operator-User-Guide/</link>
+      <link>https://goudai.github.io/posts/Spring-Boot-Operator-User-Guide/</link>
       <pubDate>Wed, 08 Apr 2020 16:00:09 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Spring-Boot-Operator-User-Guide/</guid>
+      <guid>https://goudai.github.io/posts/Spring-Boot-Operator-User-Guide/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;在Kubernetes中部署spring boot应用整体上来说是一件比较繁琐的事情，而&lt;a href=&#34;https://github.com/goudai/spring-boot-operator&#34;&gt;Spring Boot Operator&lt;/a&gt;则能带给你更清爽简单的体验。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/goudai/spring-boot-operator&#34;&gt;Spring Boot Operator&lt;/a&gt;基于Kubernetes的&lt;a href=&#34;https://kubernetes.io/docs/tasks/access-kubernetes-api/extend-api-custom-resource-definitions&#34;&gt;custom resource definitions (CRDs)&lt;/a&gt;扩展API进行的开发。&lt;/p&gt;</description>
@@ -20,10 +20,10 @@
     
     <item>
       <title>优雅的使用Prometheus Operator</title>
-      <link>https://www.flysnow.org/posts/Customize-your-kube-prometheus/</link>
+      <link>https://goudai.github.io/posts/Customize-your-kube-prometheus/</link>
       <pubDate>Fri, 30 Aug 2019 22:09:34 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Customize-your-kube-prometheus/</guid>
+      <guid>https://goudai.github.io/posts/Customize-your-kube-prometheus/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;为了方便大家使用prometheus，&lt;code&gt;Coreos&lt;/code&gt;出了提供了一个Operator&lt;a href=&#34;https://github.com/coreos/prometheus-operator&#34;&gt;Prometheus Operator&lt;/a&gt;，而为了方便大家一站式的监控方案就有了项目&lt;a href=&#34;https://github.com/coreos/kube-prometheus&#34;&gt;kube-prometheus&lt;/a&gt;是一个脚本项目，它主要使用&lt;code&gt;jsonnet&lt;/code&gt;写成，其作用呢就是模板+参数然后渲染出yaml文件集，主要是作用是提供一个开箱即用的监控栈，用于kubernetes集群的监控和应用程序的监控。
 这个项目主要包括以下软件栈&lt;/p&gt;
@@ -45,20 +45,20 @@
     
     <item>
       <title>动手修改kubeam生成证书有效期为100年</title>
-      <link>https://www.flysnow.org/posts/Hands-on-modification-of-the-validity-period-of-the-kubeam-generation-certificate/</link>
+      <link>https://goudai.github.io/posts/Hands-on-modification-of-the-validity-period-of-the-kubeam-generation-certificate/</link>
       <pubDate>Thu, 01 Aug 2019 23:33:40 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Hands-on-modification-of-the-validity-period-of-the-kubeam-generation-certificate/</guid>
+      <guid>https://goudai.github.io/posts/Hands-on-modification-of-the-validity-period-of-the-kubeam-generation-certificate/</guid>
       <description>&lt;p&gt;这里我们已v1.14.4的源代码为基础。
 首先需要下载&lt;a href=&#34;https://github.com/kubernetes/kubernetes/archive/v1.14.4.tar.gz&#34;&gt;kubernetesv1.14.4&lt;/a&gt;到本地，并导入到goland，方便我们进行改。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>部署kubernetes相关插件</title>
-      <link>https://www.flysnow.org/posts/Deploy-kubernetes-network-plugin/</link>
+      <link>https://goudai.github.io/posts/Deploy-kubernetes-network-plugin/</link>
       <pubDate>Sat, 01 Jun 2019 23:19:35 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Deploy-kubernetes-network-plugin/</guid>
+      <guid>https://goudai.github.io/posts/Deploy-kubernetes-network-plugin/</guid>
       <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
 &lt;p&gt;在&lt;a href=&#34;https://qingmu.io/2018/12/20/Deploy-a-highly-available-cluster-with-kubeadm/&#34;&gt;上一篇&lt;/a&gt;中我们完成了kubernetes的高可用集群的搭建，但我们搭建出来的集群状态均显示都是&lt;code&gt;Not Ready&lt;/code&gt;，这背后的原因是由于我们的
 集群网络并没打通，本文我们将接着上文继续往下中，完成我们的集群网络插件的安装与部署。&lt;/p&gt;
@@ -87,10 +87,10 @@
     
     <item>
       <title>在阿里云的VPC部署高可用kubernetes</title>
-      <link>https://www.flysnow.org/posts/Deploy-a-highly-available-cluster-with-kubeadm/</link>
+      <link>https://goudai.github.io/posts/Deploy-a-highly-available-cluster-with-kubeadm/</link>
       <pubDate>Fri, 17 May 2019 20:47:35 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Deploy-a-highly-available-cluster-with-kubeadm/</guid>
+      <guid>https://goudai.github.io/posts/Deploy-a-highly-available-cluster-with-kubeadm/</guid>
       <description>&lt;h1 id=&#34;kubernetes的基本概念&#34;&gt;kubernetes的基本概念&lt;/h1&gt;
 &lt;h1 id=&#34;font-colorred写在前面的话font&#34;&gt;&lt;!-- raw HTML omitted --&gt;写在前面的话&lt;!-- raw HTML omitted --&gt;&lt;/h1&gt;
 &lt;p&gt;整个安装过程中尽量不要出现写死的IP的情况出现，尽量全部使用域名代替IP。
@@ -102,10 +102,10 @@
     
     <item>
       <title>kubernetes全自动弹性伸缩组件</title>
-      <link>https://www.flysnow.org/posts/kubernetes-metrics-server/</link>
+      <link>https://goudai.github.io/posts/kubernetes-metrics-server/</link>
       <pubDate>Thu, 02 Aug 2018 12:02:42 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/kubernetes-metrics-server/</guid>
+      <guid>https://goudai.github.io/posts/kubernetes-metrics-server/</guid>
       <description>&lt;h1 id=&#34;目标&#34;&gt;目标&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;使用容器完成 metrics-server 部署&lt;/li&gt;

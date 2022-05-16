@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>elasticsearch on 青木的博客</title>
-    <link>https://www.flysnow.org/tags/elasticsearch/</link>
+    <link>https://goudai.github.io/tags/elasticsearch/</link>
     <description>Recent content in elasticsearch on 青木的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Thu, 01 Aug 2019 14:03:40 +0000</lastBuildDate><atom:link href="https://www.flysnow.org/tags/elasticsearch/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 01 Aug 2019 14:03:40 +0000</lastBuildDate><atom:link href="https://goudai.github.io/tags/elasticsearch/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>在kubernetes上运行elasticsearch集群</title>
-      <link>https://www.flysnow.org/posts/Deploy-Elasticsearch-Cluster-on-kubernetes/</link>
+      <link>https://goudai.github.io/posts/Deploy-Elasticsearch-Cluster-on-kubernetes/</link>
       <pubDate>Thu, 01 Aug 2019 14:03:40 +0000</pubDate>
       
-      <guid>https://www.flysnow.org/posts/Deploy-Elasticsearch-Cluster-on-kubernetes/</guid>
+      <guid>https://goudai.github.io/posts/Deploy-Elasticsearch-Cluster-on-kubernetes/</guid>
       <description>&lt;p&gt;像elasticsearch这种应用属于重度依赖IO，依赖磁盘，对磁盘敏感的应用，如果采用分布式文件系统（NFS/GlusterFS等）来进行数据的存储，对ES的性能会造成很大的影响。
 elasticsearch是具有状态的应用，我们可以采用两种方式部署，STS+LocalPV 或者是Deployment+NodeSelector+HostPath 的方式进行部署，本质上来说两者区别不大。&lt;/p&gt;</description>
     </item>
