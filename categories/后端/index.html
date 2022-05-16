@@ -9,20 +9,21 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
     
 
-    <title>404 Page not found | 青木的博客</title>
-    <meta property="og:title" content="404 Page not found - 青木的博客">
+    <title>后端 | 青木的博客</title>
+    <meta property="og:title" content="后端 - 青木的博客">
     <meta property="og:type" content="article">
         
         
     <meta name="Keywords" content="golang,go语言,go语言笔记,青木,java,博客,项目管理,软件架构">
-    <meta name="description" content="404 Page not found">
+    <meta name="description" content="后端">
         
     <meta name="author" content="青木">
-    <meta property="og:url" content="https://goudai.github.io/404.html">
+    <meta property="og:url" content="https://goudai.github.io/categories/%E5%90%8E%E7%AB%AF/">
     <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
 
     <link rel="stylesheet" href='/css/normalize.css'>
     <link rel="stylesheet" href='/css/style.css'>
+    <link rel="alternate" type="application/rss+xml" href="https://goudai.github.io/categories/%E5%90%8E%E7%AB%AF/index.xml" title="青木的博客" />
     <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     
@@ -63,37 +64,62 @@
 
                 <div class="col-8" id="main">
                     
-<div class="body404">
-    <div class="info404">
-        <header id="header404" class="clearfix">
-            <div class="site-name404"><i>404</i></div>
+<div class="res-cons">
+    
+    <h3 class="archive-title">
+        分类
+        <span class="keyword">后端</span>
+        中的文章
+    </h3>
+    
+
+    
+    <article class="post">
+        <header>
+            <h1 class="post-title">
+                <a href="https://goudai.github.io/posts/Customize-your-kube-prometheus/">优雅的使用Prometheus Operator</a>
+            </h1>
         </header>
-        <section>
-            <div class="title404">
-                <p>每一个平凡的日常<br />都是连续发生中的奇迹</p>
-            </div>
+        <date class="post-meta meta-date">
+            2019年8月30日
+        </date>
+        
+        <div class="post-meta meta-category">
+            |
             
+            <a href='/categories/%E5%90%8E%E7%AB%AF'>后端</a>
+            
+        </div>
+        
+        <div class="post-content">
+            <h1 id="前言">前言</h1>
+<p>为了方便大家使用prometheus，<code>Coreos</code>出了提供了一个Operator<a href="https://github.com/coreos/prometheus-operator">Prometheus Operator</a>，而为了方便大家一站式的监控方案就有了项目<a href="https://github.com/coreos/kube-prometheus">kube-prometheus</a>是一个脚本项目，它主要使用<code>jsonnet</code>写成，其作用呢就是模板+参数然后渲染出yaml文件集，主要是作用是提供一个开箱即用的监控栈，用于kubernetes集群的监控和应用程序的监控。
+这个项目主要包括以下软件栈</p>
+<ul>
+<li>Prometheus Operator</li>
+<li>Highly available Prometheus</li>
+<li>Highly available Alertmanager</li>
+<li>Prometheus node-exporter</li>
+<li>Prometheus Adapter for Kubernetes Metrics APIs</li>
+<li>Kube-state-metrics</li>
+<li>Grafana</li>
+</ul>
+<p>说是开箱即用，确实也是我们只需要clone下来，然后<code>kubectl apply ./manifests</code>，manifests目录中生成的是预先生成的yaml描述文件，有诸多不方便的地方，比如说</p>
+<ul>
+<li>镜像仓库的地址都在gcr和query.io，这两个地址国内拉起来都费劲</li>
+<li>没有持久化存储promethus的数据</li>
+</ul>……
+            <p class="readmore"><a href="https://goudai.github.io/posts/Customize-your-kube-prometheus/">阅读全文</a></p>
+        </div>
+    </article>
+    
 
-<div class="post-archive">
-    <h2>See Also</h2>
-    <ul class="listing">
-        
-        <li><a href="/posts/Spring-Boot-Operator-User-Guide/">使用Spring Boot Operator部署SpringBoot到K8S</a></li>
-        
-        <li><a href="/tags/">tags</a></li>
-        
-        <li><a href="/posts/Monitor-ETCD/">Prometheus Operator监控ETCD</a></li>
-        
-        <li><a href="/posts/Monitor-springboot-microservices/">Prometheus Operator监控SpringCloud</a></li>
-        
-        <li><a href="/posts/Customize-your-kube-prometheus/">优雅的使用Prometheus Operator</a></li>
-        
-    </ul>
-</div>
+    
 
-            <a rel="nofollow" href="https://goudai.github.io/" class="index404">回首页看看</a>
-        </section>
-    </div>
+
+
+
+
 </div>
 
                     <footer id="footer">

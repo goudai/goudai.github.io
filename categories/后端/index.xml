@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>后端 on 青木的博客</title>
+    <link>https://goudai.github.io/categories/%E5%90%8E%E7%AB%AF/</link>
+    <description>Recent content in 后端 on 青木的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Fri, 30 Aug 2019 22:09:34 +0000</lastBuildDate><atom:link href="https://goudai.github.io/categories/%E5%90%8E%E7%AB%AF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>优雅的使用Prometheus Operator</title>
+      <link>https://goudai.github.io/posts/Customize-your-kube-prometheus/</link>
+      <pubDate>Fri, 30 Aug 2019 22:09:34 +0000</pubDate>
+      
+      <guid>https://goudai.github.io/posts/Customize-your-kube-prometheus/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+&lt;p&gt;为了方便大家使用prometheus，&lt;code&gt;Coreos&lt;/code&gt;出了提供了一个Operator&lt;a href=&#34;https://github.com/coreos/prometheus-operator&#34;&gt;Prometheus Operator&lt;/a&gt;，而为了方便大家一站式的监控方案就有了项目&lt;a href=&#34;https://github.com/coreos/kube-prometheus&#34;&gt;kube-prometheus&lt;/a&gt;是一个脚本项目，它主要使用&lt;code&gt;jsonnet&lt;/code&gt;写成，其作用呢就是模板+参数然后渲染出yaml文件集，主要是作用是提供一个开箱即用的监控栈，用于kubernetes集群的监控和应用程序的监控。
+这个项目主要包括以下软件栈&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Prometheus Operator&lt;/li&gt;
+&lt;li&gt;Highly available Prometheus&lt;/li&gt;
+&lt;li&gt;Highly available Alertmanager&lt;/li&gt;
+&lt;li&gt;Prometheus node-exporter&lt;/li&gt;
+&lt;li&gt;Prometheus Adapter for Kubernetes Metrics APIs&lt;/li&gt;
+&lt;li&gt;Kube-state-metrics&lt;/li&gt;
+&lt;li&gt;Grafana&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;说是开箱即用，确实也是我们只需要clone下来，然后&lt;code&gt;kubectl apply ./manifests&lt;/code&gt;，manifests目录中生成的是预先生成的yaml描述文件，有诸多不方便的地方，比如说&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;镜像仓库的地址都在gcr和query.io，这两个地址国内拉起来都费劲&lt;/li&gt;
+&lt;li&gt;没有持久化存储promethus的数据&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
