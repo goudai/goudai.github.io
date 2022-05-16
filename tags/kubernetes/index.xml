@@ -86,7 +86,7 @@
     </item>
     
     <item>
-      <title>在阿里云的VPC部署高可用kubernetes</title>
+      <title>部署高可用kubernetes</title>
       <link>https://goudai.github.io/posts/Deploy-a-highly-available-cluster-with-kubeadm/</link>
       <pubDate>Fri, 17 May 2019 20:47:35 +0000</pubDate>
       
