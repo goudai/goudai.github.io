@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SpringCloud on 青木的博客</title>
+    <link>https://www.flysnow.org/tags/SpringCloud/</link>
+    <description>Recent content in SpringCloud on 青木的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sun, 01 Sep 2019 22:18:47 +0000</lastBuildDate><atom:link href="https://www.flysnow.org/tags/SpringCloud/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Prometheus Operator监控SpringCloud</title>
+      <link>https://www.flysnow.org/posts/Monitor-springboot-microservices/</link>
+      <pubDate>Sun, 01 Sep 2019 22:18:47 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/Monitor-springboot-microservices/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;在上一篇文章&lt;a href=&#34;https://qingmu.io/2019/08/30/Customize-your-kube-prometheus/&#34;&gt;优雅的使用Prometheus Operator&lt;/a&gt;中我们搭建起来了监控的基础堆栈。下来我们来监控我们的业务服务。&lt;/li&gt;
+&lt;li&gt;监控这个SpringCloud的java微服务的方式有很多，比如说基于eureka的服务型和基于kubernetes的endpoints的注解服务发现。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>部署业务并使用Feign进行服务间调用（附带一部分源码分析）</title>
+      <link>https://www.flysnow.org/posts/Run-the-business-service-to-complete-the-service-call-using-Feign/</link>
+      <pubDate>Fri, 16 Aug 2019 20:51:07 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/Run-the-business-service-to-complete-the-service-call-using-Feign/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+&lt;p&gt;在前面我们搭建起来了&lt;a href=&#34;https://qingmu.io/2019/08/07/Run-eureka-cluster-on-kubernetes/&#34;&gt;eureka&lt;/a&gt;,和&lt;a href=&#34;https://qingmu.io/2019/08/09/Run-the-configuration-hub-cluster-on-kubernetes/&#34;&gt;配置中心&lt;/a&gt;，基于这两者我们就能愉快的写业务代码了。这章节我们看下怎么业务服务和业务服务直接如何完成调用。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>在kubernetes运行分布式追踪zipkin</title>
+      <link>https://www.flysnow.org/posts/Run-distributed-trace-zipkin-in-kubernetes/</link>
+      <pubDate>Sat, 10 Aug 2019 20:27:39 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/Run-distributed-trace-zipkin-in-kubernetes/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://zipkin.io&#34;&gt;Zipkin&lt;/a&gt;是一个开放&lt;a href=&#34;https://github.com/openzipkin/zipkin&#34;&gt;源代码&lt;/a&gt;分布式的跟踪系统，每个服务向zipkin报告计时数据，zipkin会根据调用关系通过Zipkin UI生成依赖关系图。简单的来说就是个http服务器
+它支持多种后端存储（&amp;ldquo;cassandra&amp;rdquo;,&amp;ldquo;mysql&amp;rdquo;,&amp;ldquo;elasticsearch&amp;rdquo;）持久化客户端推送过来的数据.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>在kubernetes上运行SpringCloud配置中心</title>
+      <link>https://www.flysnow.org/posts/Run-the-configuration-hub-cluster-on-kubernetes/</link>
+      <pubDate>Fri, 09 Aug 2019 23:52:56 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/Run-the-configuration-hub-cluster-on-kubernetes/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+&lt;p&gt;在分布式系统中，我们的配置管理起来是很麻烦的一件事儿，特别是在如果没有配置中心的时候。在我们java开发中，一般而言会将敏感配置信息（如DB的user，password），数据库的地址，redis地址等等，
+一系列配置信息和项目代码解耦，根据每个环境单独配置，这样一来是方便不需要改代码，也不需要在项目中冗余多份，二来是更加的安全。那么分离之后我们将面临的问题是怎么读取这个配置文件：&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>在kubernetes上运行eureka集群</title>
+      <link>https://www.flysnow.org/posts/Run-eureka-cluster-on-kubernetes/</link>
+      <pubDate>Wed, 07 Aug 2019 22:49:20 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/Run-eureka-cluster-on-kubernetes/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+&lt;p&gt;eureka 在springcloud体系中，主要实现一个注册中心的角色，所有的服务都将注册到eureke中，调用用者将从这里通过名称获取到对应的服务的IP集合列表。
+作为一个分布式系统eureka在CAP中，选中了AP，优先保证可用性，放弃了强一致性，这样设计也符合注册中心的需要。
+当发生网络分区故障（15分钟内超过85%的节点都没有正常的心跳），eureka会启用注册保护，即维持住当前心跳虽然失败的服务列表，并不进行删除。并能正常的提供查询服务（虽然不是最新）和注册服务（即不会同步到其他eureka节点），当网络恢复时，eureka会正确的同步信息，和恢复删除过期节点信息。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>在kubernetes上运行Spring Cloud Gateway（二）</title>
+      <link>https://www.flysnow.org/posts/Run-Spring-Cloud-Gateway-on-kubernetes-2/</link>
+      <pubDate>Wed, 07 Aug 2019 12:25:41 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/Run-Spring-Cloud-Gateway-on-kubernetes-2/</guid>
+      <description>&lt;p&gt;在&lt;a href=&#34;https://qingmu.io/2019/08/06/Run-Spring-Cloud-Gateway-on-kubernetes/&#34;&gt;https://qingmu.io/2019/08/06/Run-Spring-Cloud-Gateway-on-kubernetes/&lt;/a&gt;文章中，我们搭建好了基本的网关的架子。这篇文章中
+我们继续剩下的部分，将网关和部署到k8s中，并结合&lt;code&gt;Ingress&lt;/code&gt;完成域名访问我们的网关，通过&lt;code&gt;Secret&lt;/code&gt;完成网关HTTPS的安全加密。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>在kubernetes上运行Spring Cloud Gateway（一）</title>
+      <link>https://www.flysnow.org/posts/Run-Spring-Cloud-Gateway-on-kubernetes/</link>
+      <pubDate>Tue, 06 Aug 2019 17:43:36 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/Run-Spring-Cloud-Gateway-on-kubernetes/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+&lt;p&gt;[https://github.com/spring-cloud/spring-cloud-gateway](Spring Cloud Gateway)是Spring Cloud官方推出的一个网关项目，主要是基于&lt;a href=&#34;https://github.com/reactor/reactor-netty&#34;&gt;reactor-netty&lt;/a&gt;实现。网关在微服务系统主要充当了一个入口&amp;quot;门&amp;quot;的作用，所有的IN/OUT都需要经过这一道门，才能访问到微服务池子中的功能api。
+这样的设计方便了我们对业务功能的保护api资源的保护，我们可以在这里灵活的控制对外开放的API集合，而这些API集合就构成了我们的&lt;code&gt;&amp;quot;系统&amp;quot;&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;我们还可以方便的在这里完成鉴权，如果是非法用户之间在这里干掉，从而避免了对业务的调用。&lt;/p&gt;
+&lt;p&gt;还可以对参数进行转换，比如从调用者带过来的是一个&lt;code&gt;JWT&lt;/code&gt;我们可以解析这个Token，得到诸如&lt;code&gt;currentUserId&lt;/code&gt;，&lt;code&gt;租户id&lt;/code&gt;，&lt;code&gt;username&lt;/code&gt;，等等一些列参数后，再往后传递到具体的微服务上。&lt;/p&gt;
+&lt;p&gt;这里只是一些常用功能的列举，本质上来说呢，他就是一组Filters，我们可以通过扩展它的Filter，快速完成业务所需要的功能效果。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>记SpringCloud 1.X 升级到2.x</title>
+      <link>https://www.flysnow.org/posts/How-to-upgrade-SpringCloud1-x-to-2-x/</link>
+      <pubDate>Wed, 31 Oct 2018 13:32:01 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/How-to-upgrade-SpringCloud1-x-to-2-x/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;前后花了两周多个时间完成了 &lt;code&gt;Spring Boot 1.5.6.RELEASE &amp;amp; Spring Cloud Dalston.SR4&lt;/code&gt;  升级到 &lt;code&gt;Spring Boot 2.0.6.RELEASE &amp;amp; Spring Cloud Finchley.SR2 &amp;amp; spring-cloud-netflix  2.0.2.RELEASE&lt;/code&gt; 的工作。&lt;/li&gt;
+&lt;li&gt;总结一下遇到的一些问题&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>扩展spring-cloud-ribbon支持灰度</title>
+      <link>https://www.flysnow.org/posts/Extended-spring-cloud-ribbon-supports-grayscale/</link>
+      <pubDate>Tue, 07 Aug 2018 12:42:47 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/Extended-spring-cloud-ribbon-supports-grayscale/</guid>
+      <description>&lt;h1 id=&#34;目标&#34;&gt;目标&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;扩展ribbon完成灰度调用&lt;/li&gt;
+&lt;li&gt;完成对zuul的支持&lt;/li&gt;
+&lt;li&gt;完成服务间调用的支持&lt;/li&gt;
+&lt;li&gt;实战，解决在开发环境，进行开发中的测试,DEBUG.在微服务的模式下,需要在开发者的机器启动大量服务，
+启动大量的服务需要大量的内存和大量的时间，在我们时间的项目开发中，在16G的机器上甚至无法进行调
+和测试相关工作。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

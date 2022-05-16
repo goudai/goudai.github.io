@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mysql on 青木的博客</title>
+    <link>https://www.flysnow.org/tags/Mysql/</link>
+    <description>Recent content in Mysql on 青木的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sun, 11 Aug 2019 22:25:50 +0000</lastBuildDate><atom:link href="https://www.flysnow.org/tags/Mysql/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从部署mysql聊一聊有状态服务和PV及PVC</title>
+      <link>https://www.flysnow.org/posts/Run-mysql-on-kubernetes/</link>
+      <pubDate>Sun, 11 Aug 2019 22:25:50 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/Run-mysql-on-kubernetes/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+&lt;p&gt;部署mysql之前我们需要先了解一个概念&lt;code&gt;有状态服务&lt;/code&gt;。这是一种特殊的服务，简单的归纳下就是会产生需要持久化的数据，并且有很强的I/O需求，且重启需要依赖上次存储到磁盘的数据。如典型的mysql，kafka，zookeeper等等。&lt;/p&gt;
+&lt;p&gt;在我们有比较优秀的商业存储的前提下，灰常推荐使用&lt;code&gt;有状态服务&lt;/code&gt;进行部署，计算和存储分离那是相当的爽的。在实际生产中如果没有这种存储，才有localPV也是不错的选择，当然local pv其实呢和hostPath是一样的。当然我们在开发测试环境也是可以自己搭建一套简单的如NFS服务，来享受存储和计算分离的爽快感。&lt;/p&gt;
+&lt;p&gt;kubernetes中定义一种了资源类型&lt;code&gt;Stateful Service&lt;/code&gt;即有状态服务，有状态服务需要的持久化数据动态绑定我们可以利用存储的API PersistentVolume（PV）和PersistentVolumeClaim（PVC）来进行需要的相关数据的绑定和存储。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

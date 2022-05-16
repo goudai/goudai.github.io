@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java on 青木的博客</title>
+    <link>https://www.flysnow.org/tags/Java/</link>
+    <description>Recent content in Java on 青木的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sat, 20 Jul 2019 17:43:44 +0000</lastBuildDate><atom:link href="https://www.flysnow.org/tags/Java/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Java code layering</title>
+      <link>https://www.flysnow.org/posts/Java-code-layering/</link>
+      <pubDate>Sat, 20 Jul 2019 17:43:44 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/Java-code-layering/</guid>
+      <description>&lt;p&gt;一下是一个典型的java微服务项目的代码调用结构，分层次的目的在于&lt;code&gt;解耦合&lt;/code&gt;，&lt;code&gt;内聚变化&lt;/code&gt;，&lt;code&gt;减少重复代码&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;为了达到解开的目的我们会采用&lt;code&gt;Pojos&lt;/code&gt;来对每层之间的输入输出进行隔离，以期望，如，对视图的改动，格式化，等等不会对业务产生太大影响，为此我们会产生以下对象：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;VO（View Object） 视图对象，他用于展示业务数据的封装格式，常常和视图一一对应。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;QMO（Query Model Object） 查询模型对象。顾名思义，用于查询结构的封装载体&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;DTO（Data Transfer Object） DTO对象，即一个数据载体的封装格式。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;DO（Domain Object）领域模型对象，也叫Entity实体对象，这里是我们对业务的模型的抽象模型，映射现实业务中的实体。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;PO（Persistent Object） PO对象，即持久化对象，用户解耦存储和业务直接的关系。实际开发中有了ORM之后，可直接用DO/Entity代替。和存储的（表结构，Document）等格式一一对应。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;有了这些对象的基本概念我们就可以对代码结构进行分层，完整的结构如图：&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

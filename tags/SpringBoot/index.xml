@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SpringBoot on 青木的博客</title>
+    <link>https://www.flysnow.org/tags/SpringBoot/</link>
+    <description>Recent content in SpringBoot on 青木的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 08 Apr 2020 16:00:09 +0000</lastBuildDate><atom:link href="https://www.flysnow.org/tags/SpringBoot/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用Spring Boot Operator部署SpringBoot到K8S</title>
+      <link>https://www.flysnow.org/posts/Spring-Boot-Operator-User-Guide/</link>
+      <pubDate>Wed, 08 Apr 2020 16:00:09 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/Spring-Boot-Operator-User-Guide/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+&lt;p&gt;在Kubernetes中部署spring boot应用整体上来说是一件比较繁琐的事情，而&lt;a href=&#34;https://github.com/goudai/spring-boot-operator&#34;&gt;Spring Boot Operator&lt;/a&gt;则能带给你更清爽简单的体验。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/goudai/spring-boot-operator&#34;&gt;Spring Boot Operator&lt;/a&gt;基于Kubernetes的&lt;a href=&#34;https://kubernetes.io/docs/tasks/access-kubernetes-api/extend-api-custom-resource-definitions&#34;&gt;custom resource definitions (CRDs)&lt;/a&gt;扩展API进行的开发。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

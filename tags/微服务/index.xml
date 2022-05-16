@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>微服务 on 青木的博客</title>
+    <link>https://www.flysnow.org/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/</link>
+    <description>Recent content in 微服务 on 青木的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 26 Nov 2018 23:19:17 +0000</lastBuildDate><atom:link href="https://www.flysnow.org/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Zuul源码分析(2)Filter分析</title>
+      <link>https://www.flysnow.org/posts/Zuul-processing-flow-and-business-extension-point-2/</link>
+      <pubDate>Mon, 26 Nov 2018 23:19:17 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/Zuul-processing-flow-and-business-extension-point-2/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+&lt;p&gt;在&lt;a href=&#34;https://qingmu.io/2018/11/15/Zuul-processing-flow-and-business-extension-point/&#34;&gt;前一篇&lt;/a&gt;文件中我们分析了zuul对Filter请求了不同的阶段划分了多个生命周期即FilterType。接下来我们继续分析每一个FilterType的具体的Filter有哪些，他们都干了什么。&lt;/p&gt;
+&lt;h1 id=&#34;zuulfilters运行流程图&#34;&gt;ZuulFilters运行流程图&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;前面我们分析完了zuul的一个生命周期，下面我们在来仔细的看一下每个生命周期具体使用到的Filter&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>Zuul源码分析(1)生命周期</title>
+      <link>https://www.flysnow.org/posts/Zuul-processing-flow-and-business-extension-point/</link>
+      <pubDate>Thu, 15 Nov 2018 23:19:17 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/Zuul-processing-flow-and-business-extension-point/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Zuul在&lt;code&gt;Spring Cloud Netfilx&lt;/code&gt; 体系中扮演着接入者网关的角色。&lt;/li&gt;
+&lt;li&gt;本质上来说Zuul本身就是一系列的filters, 可以类比Servlet框架的Filter。按照生命周期我们可以分为四种类型（pre,route,post,err）分别对应请求过程。你可以从&lt;code&gt;com.netflix.zuul.FilterProcessor&lt;/code&gt;类里面找到所有的生命周期处理。&lt;/li&gt;
+&lt;li&gt;为什么我们要去了解它？比如我们想在网关统一对用户进行鉴权，进行&lt;code&gt;JWT&lt;/code&gt;的解析和参数转换，比如我们想实现自己的httpClient，再比如我们想在后端业务微服务返回的结果内进行一些特别的处理，比如脱敏啊，比如去掉一些字段啊。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>记SpringCloud 1.X 升级到2.x</title>
+      <link>https://www.flysnow.org/posts/How-to-upgrade-SpringCloud1-x-to-2-x/</link>
+      <pubDate>Wed, 31 Oct 2018 13:32:01 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/How-to-upgrade-SpringCloud1-x-to-2-x/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;前后花了两周多个时间完成了 &lt;code&gt;Spring Boot 1.5.6.RELEASE &amp;amp; Spring Cloud Dalston.SR4&lt;/code&gt;  升级到 &lt;code&gt;Spring Boot 2.0.6.RELEASE &amp;amp; Spring Cloud Finchley.SR2 &amp;amp; spring-cloud-netflix  2.0.2.RELEASE&lt;/code&gt; 的工作。&lt;/li&gt;
+&lt;li&gt;总结一下遇到的一些问题&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>如何构建springcloud微服务中的异常处理体系</title>
+      <link>https://www.flysnow.org/images/How-to-handle-exceptions-gracefully-in-springcloud/</link>
+      <pubDate>Mon, 20 Aug 2018 19:18:33 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/images/How-to-handle-exceptions-gracefully-in-springcloud/</guid>
+      <description>&lt;h1 id=&#34;需求&#34;&gt;需求&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;对于我们的任何系统而言一般分为正常的业务流程和异常业务流程&lt;/li&gt;
+&lt;li&gt;我们希望业务在编写正常的业务逻辑的时候，无需去考虑处理异常的业务流程，异常对于正常的业务是完全分离的，透明的。&lt;/li&gt;
+&lt;li&gt;我们希望前端也能有一套异常处理体系（在前后端分离下尤为重要）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;目标&#34;&gt;目标&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;搭建异常处理体系流程，统一的进行异常的管理和对应的处理（包括前后端）&lt;/li&gt;
+&lt;li&gt;利用spring提供的全局异常处理器完成后端的server异常统一处理&lt;/li&gt;
+&lt;li&gt;利用zuul的ErrorFilter统一处理网关相关异常&lt;/li&gt;
+&lt;li&gt;利用Feign对异常的处理方式，及其扩展，完成服务调服务(S2S)时候异常透明的传递。&lt;/li&gt;
+&lt;li&gt;利用&lt;a href=&#34;https://github.com/dvajs/dva&#34;&gt;dvs&lt;/a&gt; 的 app.use 方法注册自己的全局异常处理器插件，完成前端的异常流程体系&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>如何构建SpringBoot的Docker镜像</title>
+      <link>https://www.flysnow.org/posts/How-to-run-springcloud-in-docker/</link>
+      <pubDate>Tue, 07 Aug 2018 21:21:18 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/How-to-run-springcloud-in-docker/</guid>
+      <description>&lt;h1 id=&#34;目标&#34;&gt;目标&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;自定义Dockerfile构建一个生产可用的jre base image&lt;/li&gt;
+&lt;li&gt;配置&lt;code&gt;maven-docker-plugin&lt;/code&gt;插件完成从源码的 &lt;code&gt;打包fatjar&lt;/code&gt; -&amp;gt; &lt;code&gt;build docker image with fatjar&lt;/code&gt; -&amp;gt; &lt;code&gt;push image&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;支持docker对JVM相关参数的配置。比如Xmx，Xms，以及完全自定义的java启动参数。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

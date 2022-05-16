@@ -1,0 +1,1473 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>如何构建SpringBoot的Docker镜像 | 青木的博客</title>
+    <meta property="og:title" content="如何构建SpringBoot的Docker镜像 - 青木的博客">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2018-08-07T21:21:18&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2018-08-07T21:21:18&#43;08:00'>
+        
+    <meta name="Keywords" content="golang,go语言,go语言笔记,青木,java,android,博客,项目管理,python,软件架构,公众号,小程序">
+    <meta name="description" content="如何构建SpringBoot的Docker镜像">
+        
+    <meta name="author" content="青木">
+    <meta property="og:url" content="https://www.flysnow.org/posts/How-to-run-springcloud-in-docker/">
+    <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+    
+    
+    
+    
+        <link rel="stylesheet" href='/css/douban.css'>
+    
+        <link rel="stylesheet" href='/css/other.css'>
+    
+</head>
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://www.flysnow.org">
+                        青木的博客
+                    </a>
+                
+                <p class="description">道可道，非常道；名可名，非常名。</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="https://www.flysnow.org">首页</a>
+                    
+                    <a  href="https://www.flysnow.org/categories/" title="归档">归档</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    <style type="text/css">
+    .post-toc {
+        position: fixed;
+        width: 200px;
+        margin-left: -210px;
+        padding: 5px 10px;
+        font-family: Athelas, STHeiti, Microsoft Yahei, serif;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, .07);
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.98);
+        background-clip: padding-box;
+        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        word-wrap: break-word;
+        white-space: nowrap;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        z-index: 999;
+        cursor: pointer;
+        max-height: 70%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .post-toc .post-toc-title {
+        width: 100%;
+        margin: 0 auto;
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .post-toc .post-toc-content {
+        font-size: 15px;
+    }
+
+    .post-toc .post-toc-content>nav>ul {
+        margin: 10px 0;
+    }
+
+    .post-toc .post-toc-content ul {
+        padding-left: 20px;
+        list-style: square;
+        margin: 0.5em;
+        line-height: 1.8em;
+    }
+
+    .post-toc .post-toc-content ul ul {
+        padding-left: 15px;
+        display: none;
+    }
+
+    @media print,
+    screen and (max-width:1057px) {
+        .post-toc {
+            display: none;
+        }
+    }
+</style>
+<div class="post-toc" style="position: absolute; top: 188px;">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#dockerfile-vs-docker-mave-plugin">Dockerfile VS Docker-mave-plugin</a>
+      <ul>
+        <li><a href="#dockerfile">Dockerfile</a></li>
+        <li><a href="#docker-mave-plugin">Docker-mave-plugin</a></li>
+      </ul>
+    </li>
+    <li><a href="#entrypoint-vs-cmd">ENTRYPOINT VS CMD</a></li>
+    <li><a href="#配置pom">配置POM</a></li>
+    <li><a href="#添加插件到pluginmanagement">添加插件到pluginManagement</a></li>
+    <li><a href="#配置私服">配置私服</a></li>
+    <li><a href="#插件配置">插件配置</a></li>
+    <li><a href="#多环境配置">多环境配置</a></li>
+    <li><a href="#构建">构建</a></li>
+    <li><a href="#检验">检验</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var postToc = $(".post-toc");
+        if (postToc.length) {
+            var leftPos = $("#main").offset().left;
+            if (leftPos < 220) {
+                postToc.css({ "width": leftPos - 10, "margin-left": (0 - leftPos) })
+            }
+
+            var t = postToc.offset().top - 20,
+                a = {
+                    start: {
+                        position: "absolute",
+                        top: t
+                    },
+                    process: {
+                        position: "fixed",
+                        top: 20
+                    },
+                };
+            $(window).scroll(function () {
+                var e = $(window).scrollTop();
+                e < t ? postToc.css(a.start) : postToc.css(a.process)
+            })
+        }
+
+        if ($("#TableOfContents").children().length < 1) {
+            $(".post-toc").remove();
+        }
+    })
+</script>
+    <article class="post">
+        <header>
+            <h1 class="post-title">如何构建SpringBoot的Docker镜像</h1>
+        </header>
+        <date class="post-meta meta-date">
+            2018年8月7日
+        </date>
+        
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span>
+                    阅读</span></span>
+        </div>
+        
+        
+        <div class="post-content">
+            <h1 id="目标">目标</h1>
+<ul>
+<li>自定义Dockerfile构建一个生产可用的jre base image</li>
+<li>配置<code>maven-docker-plugin</code>插件完成从源码的 <code>打包fatjar</code> -&gt; <code>build docker image with fatjar</code> -&gt; <code>push image</code></li>
+<li>支持docker对JVM相关参数的配置。比如Xmx，Xms，以及完全自定义的java启动参数。</li>
+</ul>
+<h1 id="rootfs">rootfs</h1>
+<ul>
+<li>说打包之前我们先了解linux内核与发行版操作系统（如centos，ubuntu，debian）之间的关系。</li>
+<li>由于linux内核与具体的操作系统是解耦的。即互相不干涉的，docker利用了这个特性，将操作系统的文件打包成一个压缩文件。</li>
+<li>在运行时，解压这个压缩包，并通过chroot进行挂载，就完成了容器的内部我们看到的操作系统了。即我们的rootfs。</li>
+<li>那么这个和我们docker打包java应用的关系在哪里呢？</li>
+<li>总所周知的是java是又提供打包解决方案的，打包成jar，但是此方案的问题在于我并不能在任何一个环境里面运行直接运行（因为依赖JRE），而每一个操作系统又不一样，这就导致许多环境带来的时间浪费。</li>
+<li>结合前面提到了docker打包是把操作系统的文件打包的，所以我们能不能把<code>操作系统+jre+application.jar</code>这三老铁一锅端，全给他打包起来不就解决了吗？没错，这就是我们要构建镜像。</li>
+<li>没错我们想到了一个好的办法来解决打包的问题。那我们在来看看这个东西是不是还有啥问题？你看啊，我们最初了发布一个fatjar也就60M，要结合上<code>OS jre</code>岂不是每次都大很多，浪费很多的磁盘，网络传送开销也加大的蛮多。</li>
+<li>这个问题的docker中利用了分层文件系统来解决这个问题，即我们的OS JRE 这些不变的东西只会在第一次使用时下载一次或者上传一次，其他时候我们只有变化的application.jar层需要进行上传和下载</li>
+</ul>
+<h1 id="最终形态">最终形态</h1>
+<ul>
+<li>我们像搭积木一样一层一层的把我们所需要的文件系统叠加起来，就完成了我们想要的Image。
+<!-- raw HTML omitted --></li>
+</ul>
+<h1 id="docker-image">Docker Image</h1>
+<h1 id="需求">需求</h1>
+<ul>
+<li>我们要达到如下预期</li>
+</ul>
+<ol>
+<li>镜像比如要足够小（尽量控制在100M以内）</li>
+<li>字符集必须要支持中文，不然就乱码了</li>
+<li>时区的是UTC+8</li>
+<li>字体的支持，不然excel导出会抛出错误</li>
+<li>还的支持下imagemagick。</li>
+<li>使我们运行在容器中的java进程PID!=1
+如果Pid=1会有很多问题(如jmap,jstat&hellip;等工具无法使用,你可以从这里了解更多 <a href="https://github.com/docker-library/openjdk/issues/76">jmap not happy on alpine </a>)
+这里我们使用Tini来完成这个工作，关于Tini你可以从这里了解更多 <a href="https://github.com/krallin/tini/issues/8">What is advantage of Tini?</a></li>
+</ol>
+<h1 id="措施">措施</h1>
+<ul>
+<li>基于以上要求我们构建出一下镜像</li>
+<li>首先使用apline作为基础镜像足够小只有5M</li>
+<li>由于alpine自带支持中文的字符集，这里我们只需要将LANG设置为C.UTF-8即可完美的支持中文。</li>
+<li>国内软件源首选阿里云啦，顺道配置一下阿里云的镜像源，加速我们的镜像构建速度。</li>
+<li>配置UTC+8时区需要安装tzdata，安装完成之后配置一下即可。</li>
+<li>目前alpine携带JDK版本为1.8.232。</li>
+<li>使用<a href="https://github.com/krallin/tini">tini</a> 包装java进程。</li>
+</ul>
+<h1 id="dockerfile构建基础java镜像图中最一层和第二层">Dockerfile构建基础java镜像（图中最一层和第二层）</h1>
+<ul>
+<li>如下的dockerfile是一个完整的dockerfile文件。基于5M大小的<code>alpine</code>镜像构建，apline提供的包管理器是<a href="http://wiki.alpinelinux.org/wiki/Alpine_Linux_package_management">apk</a>，
+我在这里为了方便使用直接配置了阿里云提供的镜像源，加速构建过程。这里我们劲量拆分步骤，方便</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># freemanliu/openjre:8.232</span><span style="color:#a61717;background-color:#e3d2d2">
+</span></span></span><span style="display:flex;"><span><span style="color:#a61717;background-color:#e3d2d2"></span><span style="color:#000;font-weight:bold">FROM</span><span style="color:#d14"> alpine:3.11.2</span><span style="color:#a61717;background-color:#e3d2d2">
+</span></span></span><span style="display:flex;"><span><span style="color:#a61717;background-color:#e3d2d2"></span><span style="color:#000;font-weight:bold">MAINTAINER</span><span style="color:#d14"> qingmu 247687009@qq.com</span><span style="color:#a61717;background-color:#e3d2d2">
+</span></span></span><span style="display:flex;"><span><span style="color:#a61717;background-color:#e3d2d2"></span><span style="color:#000;font-weight:bold">ENV</span> <span style="color:#008080">LANG</span><span style="color:#000;font-weight:bold">=</span>C.UTF-8 <span style="color:#d14">\
+</span></span></span><span style="display:flex;"><span><span style="color:#d14"></span>    <span style="color:#008080">TZ</span><span style="color:#000;font-weight:bold">=</span>Asia/Shanghai<span style="color:#a61717;background-color:#e3d2d2">
+</span></span></span><span style="display:flex;"><span><span style="color:#a61717;background-color:#e3d2d2"></span><span style="color:#000;font-weight:bold">RUN</span> ln -snf /usr/share/zoneinfo/<span style="color:#008080">$TZ</span> /etc/localtime <span style="color:#d14">\
+</span></span></span><span style="display:flex;"><span><span style="color:#d14"></span><span style="color:#000;font-weight:bold">&amp;&amp;</span> <span style="color:#0086b3">echo</span> <span style="color:#008080">$TZ</span> &gt; /etc/timezone <span style="color:#d14">\
+</span></span></span><span style="display:flex;"><span><span style="color:#d14"></span><span style="color:#000;font-weight:bold">&amp;&amp;</span> sed -i <span style="color:#d14">&#39;s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g&#39;</span> /etc/apk/repositories <span style="color:#d14">\
+</span></span></span><span style="display:flex;"><span><span style="color:#d14"></span><span style="color:#000;font-weight:bold">&amp;&amp;</span> apk update <span style="color:#d14">\
+</span></span></span><span style="display:flex;"><span><span style="color:#d14"></span><span style="color:#000;font-weight:bold">&amp;&amp;</span> apk add --update procps <span style="color:#d14">\
+</span></span></span><span style="display:flex;"><span><span style="color:#d14"></span><span style="color:#000;font-weight:bold">&amp;&amp;</span> apk add --no-cache  ca-certificates ttf-dejavu tzdata tini bash<span style="color:#a61717;background-color:#e3d2d2">
+</span></span></span><span style="display:flex;"><span><span style="color:#a61717;background-color:#e3d2d2"></span><span style="color:#998;font-style:italic"># 变动层</span><span style="color:#a61717;background-color:#e3d2d2">
+</span></span></span><span style="display:flex;"><span><span style="color:#a61717;background-color:#e3d2d2"></span><span style="color:#000;font-weight:bold">RUN</span> apk add --no-cache  openjdk8-jre<span style="color:#a61717;background-color:#e3d2d2">
+</span></span></span><span style="display:flex;"><span><span style="color:#a61717;background-color:#e3d2d2"></span><span style="color:#000;font-weight:bold">ENV</span> <span style="color:#008080">JAVA_HOME</span><span style="color:#000;font-weight:bold">=</span>/usr/lib/jvm/java-1.8-openjdk/jre <span style="color:#d14">\
+</span></span></span><span style="display:flex;"><span><span style="color:#d14"></span>    <span style="color:#008080">PATH</span><span style="color:#000;font-weight:bold">=</span><span style="color:#008080">$PATH</span>:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openjdk/bin<span style="color:#a61717;background-color:#e3d2d2">
+</span></span></span><span style="display:flex;"><span><span style="color:#a61717;background-color:#e3d2d2"></span><span style="color:#000;font-weight:bold">RUN</span> rm -rf /var/cache/apk/*<span style="color:#a61717;background-color:#e3d2d2">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>如你想动手构建自己，将以上Dockerfile文件copy一份，写入Dockerfile文件中执行构建即可。执行以下命令,即可完成属于您自己的镜像，这里需要一点docker的基础知识</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#0086b3">echo</span> <span style="color:#d14">&#39;dockerfile&#39;</span> &gt; Dockerfile
+</span></span><span style="display:flex;"><span>docker build -t freemanliu/openjre .
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>关于docker build 命令你可以点击<a href="https://docs.docker.com/engine/reference/commandline/build/">这里</a>了解更多更详细的用法。</li>
+<li>当然了，你如果不想构建那么也可以使用我在<a href="https://github.com/goudai/kubernetes-images">github</a>上写好的，并在<a href="https://hub.docker.com/r/freemanliu/openjre/">dockerhub</a>中autobuild好的镜像。</li>
+<li>注意该镜像不包含字体文件，在使用到字体相关的api时，会抛出异常，如对excel导出的操作，这时候我们需要安装一下字体库，我们通过apk库添加十分简单,只需在以上的Dockerfile描述文件中加入一下库即可，其他保持不变。如你还用到了其他相关软件,请google查阅相关库，使用apk包管理器添加即可。</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span> apk add --no-cache ttf-dejavu
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>如此我们便得到了一个包含了jre的Image镜像，下面我们继续来构建第三层。</li>
+</ul>
+<h1 id="springboot打包fatjar">SpringBoot打包fatjar</h1>
+<ul>
+<li>在配置maven项目的parent为<code>spring-boot-dependencies</code>后，springboot默认在pluginManagement中配置好了 <code>maven-shade-plugin</code>插件
+我们可以在我们自己具体业务微服务中激活该插件，配置如下：</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;build&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#000080">&lt;plugins&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;plugin&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#000080">&lt;groupId&gt;</span>org.apache.maven.plugins<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#000080">&lt;artifactId&gt;</span>maven-shade-plugin<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;/plugin&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#000080">&lt;/plugins&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/build&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>配置好了插件，插件怎么知道我们的start class是哪个呢？springboot很贴心的提供了一个start-class属性。我们只需要赋值即可</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;properties&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#000080">&lt;start-class&gt;</span>com.qingmu.account.Application<span style="color:#000080">&lt;/start-class&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/properties&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>配置完成之后我们可以在命令行执行如下命令，便可完成我们的fatjar的打包。</li>
+<li>执行该命令本质上mave插件会将我们所依赖的jar解压并copy到到我们的fatjar中。</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mvn clean package
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>如配置正确你将在你的target目录中看到${artifactId}.jar</li>
+<li>在命令行执行<code>java -jar target/${artifactId}.jar</code>也能正确的启动成功。</li>
+</ul>
+<h1 id="docker打包fatjar镜像构建第三层">Docker打包fatjar镜像（构建第三层）</h1>
+<ul>
+<li>在前面的的章节，我们完成了JRE镜像和fatjar的构建。接下来我们将完成他们的结合，完成灵魂的升华 ~ ~。</li>
+</ul>
+<h2 id="dockerfile-vs-docker-mave-plugin">Dockerfile VS Docker-mave-plugin</h2>
+<ul>
+<li>在java项目中我们至少有两种方式对我们的docker和fatjar进行结合打包成image。</li>
+</ul>
+<h3 id="dockerfile">Dockerfile</h3>
+<ul>
+<li>一种常见的方式是编写Dockerfile，并使用Cli命令行对齐进行相关操作，这也是网上比较多的教程所采用的方法。
+然而该方法有比较麻烦的问题：
+第一，如果你的项目较多怎么能，意味着你需要为每一个项目去添加一份dockerfile描述文件，当然这点可以通过自定义maven骨架解决。
+第二，这么多dockerfile散落在微服务项目的几十上百个仓库中，如果有一天要更新这个dockerfile中的某些内容，就会变得异常的麻烦和难以高效率的解决。</li>
+</ul>
+<h3 id="docker-mave-plugin">Docker-mave-plugin</h3>
+<ul>
+<li>这是一个由于com.spotify提供的maven插件，使用它将可以轻松的完成SpringBoot项目的docker镜像打包推送工作。</li>
+<li>当然他也能很好的解决以上Dockerfile的问题，不需要Dockerfile描述文件了，我们可以将描述的相关信息写到maven插件中，而maven是支持继承的，以为者我们只需要在我们自己的parent-pom中维护这个docker插件就维护了所有的具体微服务的打包插件了。实际用下来是相当的方便啊。实际项目中也采用的是该方案。</li>
+</ul>
+<h2 id="entrypoint-vs-cmd">ENTRYPOINT VS CMD</h2>
+<ul>
+<li>
+<p>ENTRYPOINT和CMD命令最大的不同点，在于使用cmd命令是可以在运行是通过传递参数修改镜像的运行命令的，而ENTRYPOINT命令则是不支持的。</p>
+</li>
+<li>
+<p>简单的说就是ENTRYPOINT类似编程中的常量，一旦定义好了就无法改变。而cmd则类似与变量，你可以在运行时随时赋值。</p>
+</li>
+<li>
+<p>一起来看下这个例子，这是一个常见的使用docker打包java应用的dockerfile描述文件,。使用了ENTRYPOINT来指定启动命令。</p>
+</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># freemanliu/openjre:8.232</span><span style="color:#a61717;background-color:#e3d2d2">
+</span></span></span><span style="display:flex;"><span><span style="color:#a61717;background-color:#e3d2d2"></span><span style="color:#000;font-weight:bold">FROM</span><span style="color:#d14"> java:8</span><span style="color:#a61717;background-color:#e3d2d2">
+</span></span></span><span style="display:flex;"><span><span style="color:#a61717;background-color:#e3d2d2"></span><span style="color:#000;font-weight:bold">ADD</span> app.jar app.jar<span style="color:#a61717;background-color:#e3d2d2">
+</span></span></span><span style="display:flex;"><span><span style="color:#a61717;background-color:#e3d2d2"></span><span style="color:#000;font-weight:bold">EXPOSE</span><span style="color:#d14"> 8800</span><span style="color:#a61717;background-color:#e3d2d2">
+</span></span></span><span style="display:flex;"><span><span style="color:#a61717;background-color:#e3d2d2"></span><span style="color:#000;font-weight:bold">ENTRYPOINT</span> [<span style="color:#d14">&#34;java&#34;</span>,<span style="color:#d14">&#34;-jar&#34;</span>,<span style="color:#d14">&#34;/app.jar&#34;</span>]<span style="color:#a61717;background-color:#e3d2d2">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>将这个image启动起来，我们只需要执行如下命令，变可以轻松的运行起来我们的应用。在启动镜像是它会默认执行ENTRYPOINT中所书写的描述。</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>docker run -it -rm freemanliu/app:v1.0.0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>如果我们想运行的时候不运行默认的命令，比如说我们执行以下命令，进入到容器的sh命令终端。你会发现无效，由于我们是使用的ENTRYPOINT定义的是&quot;常量&quot;，所以你将会看到的结果任然是java进程成功启动。而如果使用的CMD命令，则是可以正确的进入sh终端。</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>docker run -it -rm freemanliu/app:v1.0.0 sh
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>至于CMD也好还是ENTRYPOINT也罢，都可以用，看你的喜好了，我是更喜欢freedom一点的，我推荐CMD</li>
+<li>那么好的，基础的东西我们就讨论到这里。</li>
+</ul>
+<h2 id="配置pom">配置POM</h2>
+<p>在具体配置之前我们先总结下需要干些什么：
+第一步，肯定是先引入插件，不多说。
+第二步，既然我们想要插件帮我们完成image的push，那的让插件知道我们的私服地址吧，得知道username/password吧，所以第二步我们得配置setting.xml，添加server。
+第三步，插件有了，私服配好了，接下来就的琢磨插件的配置了吧，所有第三步我们配置插件。
+第四步，配置完成一个插件之后，我们该考虑一下多环境打包的事儿吧。第四步处理profiles</p>
+<h2 id="添加插件到pluginmanagement">添加插件到pluginManagement</h2>
+<ul>
+<li>首先是引入插件，你可以点击<a href="https://github.com/spotify/docker-maven-plugin">这里</a>了解更多插件的信息,虽然他现在极力推崇dockerfile插件，但是真的没这个实用性高啊。</li>
+<li>我们得养成一个习惯，在添加任何新的依赖是，先在咱们的parent项目的xxxManagement中先添加上，在真正业务pom中去掉版本号，让parent统一管理依赖的版本号。</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;build&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#000080">&lt;pluginManagement&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;plugins&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#000080">&lt;plugin&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;groupId&gt;</span>com.spotify<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;artifactId&gt;</span>docker-maven-plugin<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;version&gt;</span>1.1.1<span style="color:#000080">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#000080">&lt;/plugin&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;/plugins&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#000080">&lt;/pluginManagement&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/build&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="配置私服">配置私服</h2>
+<ul>
+<li>关于私服你可以自己搭建，选择还是比较多,官方的<a href="https://docs.docker.com/registry/">docker-registry</a>,比较知名和完善的<a href="https://harbor.com/">Harbor</a>，以及我们的老朋友<a href="https://hub.docker.com/r/sonatype/nexus3/">Nexus3</a>.</li>
+<li>自己搭建虽然很方便也很简单，那有没有不用自己维护性能还不错的三方私有仓库选择呢？当然还是有的，毕竟这世上好人还是多，阿里云为我们提供了免费的私有仓库服务，你只需要注册阿里云，控制台搜索容器镜像服务，就能找到他了。</li>
+<li>对于经常配置server的老司机来说这一步很简单，但是对于新玩家来说这一步比较复杂，如果你不是很熟悉并且没有配置过maven的setting.xml文件的话，我建议你使用图形化编辑器，找准如下标签插入即可。</li>
+<li>为啥<code>~/.m2/settings.xml</code>这是因为maven默认读取的配置目录是当前用户目录下的.m2目录，windows的话你需要找到你当前用户。</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>vim ~/.m2/settings.xml
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"># 找到servers标签添加如下如下信息</span>
+</span></span><span style="display:flex;"><span>&lt;servers&gt;
+</span></span><span style="display:flex;"><span>  &lt;server&gt;
+</span></span><span style="display:flex;"><span>    &lt;id&gt;aliyun-registry&lt;/id&gt; <span style="color:#998;font-style:italic"># id将在后面插件中用到</span>
+</span></span><span style="display:flex;"><span>    &lt;username&gt;你的私服的username&lt;/username&gt;
+</span></span><span style="display:flex;"><span>    &lt;password&gt;你私服的密码&lt;/password&gt;
+</span></span><span style="display:flex;"><span>    &lt;configuration&gt;
+</span></span><span style="display:flex;"><span>      &lt;email&gt;你的email&lt;/email&gt;
+</span></span><span style="display:flex;"><span>    &lt;/configuration&gt;
+</span></span><span style="display:flex;"><span>    &lt;/server&gt;
+</span></span><span style="display:flex;"><span>&lt;/servers&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="插件配置">插件配置</h2>
+<ul>
+<li>在配置插件前，另一个插件<code>git-commit-id-plugin</code>通过该插件我们可以在maven的其他插件中很方便的用到git相关信息，比如获取到当前的git tag。</li>
+<li>通用的我们配置的插件默认不激活，写到pluginManagement</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;pluginManagement&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#000080">&lt;plugins&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#000080">&lt;plugin&gt;</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#000080">&lt;groupId&gt;</span>pl.project13.maven<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#000080">&lt;artifactId&gt;</span>git-commit-id-plugin<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#000080">&lt;version&gt;</span>2.2.4<span style="color:#000080">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#000080">&lt;executions&gt;</span>
+</span></span><span style="display:flex;"><span>           <span style="color:#000080">&lt;execution&gt;</span>
+</span></span><span style="display:flex;"><span>               <span style="color:#000080">&lt;id&gt;</span>get-the-git-infos<span style="color:#000080">&lt;/id&gt;</span>
+</span></span><span style="display:flex;"><span>               <span style="color:#000080">&lt;goals&gt;</span>
+</span></span><span style="display:flex;"><span>                   <span style="color:#000080">&lt;goal&gt;</span>revision<span style="color:#000080">&lt;/goal&gt;</span>
+</span></span><span style="display:flex;"><span>               <span style="color:#000080">&lt;/goals&gt;</span>
+</span></span><span style="display:flex;"><span>           <span style="color:#000080">&lt;/execution&gt;</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#000080">&lt;/executions&gt;</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#000080">&lt;configuration&gt;</span>
+</span></span><span style="display:flex;"><span>           <span style="color:#998;font-style:italic">&lt;!-- 使properties扩展到整个maven bulid 周期
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">           Ref: https://github.com/ktoso/maven-git-commit-id-plugin/issues/280 --&gt;</span>
+</span></span><span style="display:flex;"><span>           <span style="color:#000080">&lt;injectAllReactorProjects&gt;</span>true<span style="color:#000080">&lt;/injectAllReactorProjects&gt;</span>
+</span></span><span style="display:flex;"><span>           <span style="color:#000080">&lt;dateFormat&gt;</span>yyyyMMddHHmmss<span style="color:#000080">&lt;/dateFormat&gt;</span>
+</span></span><span style="display:flex;"><span>           <span style="color:#998;font-style:italic">&lt;!--&lt;useNativeGit&gt;false&lt;/useNativeGit&gt;--&gt;</span>
+</span></span><span style="display:flex;"><span>           <span style="color:#000080">&lt;verbose&gt;</span>true<span style="color:#000080">&lt;/verbose&gt;</span>
+</span></span><span style="display:flex;"><span>           <span style="color:#000080">&lt;dotGitDirectory&gt;</span>${project.basedir}/.git<span style="color:#000080">&lt;/dotGitDirectory&gt;</span>
+</span></span><span style="display:flex;"><span>           <span style="color:#998;font-style:italic">&lt;!--若项目打包类型为pom,是否取消构建;默认值:true;--&gt;</span>
+</span></span><span style="display:flex;"><span>           <span style="color:#000080">&lt;skipPoms&gt;</span>false<span style="color:#000080">&lt;/skipPoms&gt;</span>
+</span></span><span style="display:flex;"><span>           <span style="color:#998;font-style:italic">&lt;!--是否生成&#34;git.properties&#34;文件;默认值:false;--&gt;</span>
+</span></span><span style="display:flex;"><span>           <span style="color:#000080">&lt;generateGitPropertiesFile&gt;</span>true<span style="color:#000080">&lt;/generateGitPropertiesFile&gt;</span>
+</span></span><span style="display:flex;"><span>           <span style="color:#998;font-style:italic">&lt;!--指定&#34;git.properties&#34;文件的存放路径(相对于${project.basedir}的一个路径);--&gt;</span>
+</span></span><span style="display:flex;"><span>           <span style="color:#000080">&lt;generateGitPropertiesFilename&gt;</span>git.properties<span style="color:#000080">&lt;/generateGitPropertiesFilename&gt;</span>
+</span></span><span style="display:flex;"><span>           <span style="color:#998;font-style:italic">&lt;!--git描述配置,可选;由JGit提供实现;--&gt;</span>
+</span></span><span style="display:flex;"><span>           <span style="color:#000080">&lt;gitDescribe&gt;</span>
+</span></span><span style="display:flex;"><span>               <span style="color:#998;font-style:italic">&lt;!--是否生成描述属性--&gt;</span>
+</span></span><span style="display:flex;"><span>               <span style="color:#000080">&lt;skip&gt;</span>false<span style="color:#000080">&lt;/skip&gt;</span>
+</span></span><span style="display:flex;"><span>               <span style="color:#998;font-style:italic">&lt;!--提交操作未发现tag时,仅打印提交操作ID,--&gt;</span>
+</span></span><span style="display:flex;"><span>               <span style="color:#000080">&lt;always&gt;</span>false<span style="color:#000080">&lt;/always&gt;</span>
+</span></span><span style="display:flex;"><span>               <span style="color:#998;font-style:italic">&lt;!--提交操作ID显式字符长度,最大值为:40;默认值:7; 0代表特殊意义;后面有解释; --&gt;</span>
+</span></span><span style="display:flex;"><span>               <span style="color:#000080">&lt;abbrev&gt;</span>40<span style="color:#000080">&lt;/abbrev&gt;</span>
+</span></span><span style="display:flex;"><span>               <span style="color:#998;font-style:italic">&lt;!--构建触发时,代码有修改时(即&#34;dirty state&#34;),添加指定后缀;默认值:&#34;&#34;;--&gt;</span>
+</span></span><span style="display:flex;"><span>               <span style="color:#000080">&lt;dirty&gt;</span>-dirty<span style="color:#000080">&lt;/dirty&gt;</span>
+</span></span><span style="display:flex;"><span>               <span style="color:#998;font-style:italic">&lt;!--always print using the &#34;tag-commits_from_tag-g_commit_id-maybe_dirty&#34; format, even if &#34;on&#34; a tag. The distance will always be 0 if you&#39;re &#34;on&#34; the tag. --&gt;</span>
+</span></span><span style="display:flex;"><span>               <span style="color:#000080">&lt;forceLongFormat&gt;</span>false<span style="color:#000080">&lt;/forceLongFormat&gt;</span>
+</span></span><span style="display:flex;"><span>           <span style="color:#000080">&lt;/gitDescribe&gt;</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#000080">&lt;/configuration&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;/plugin&gt;</span>
+</span></span><span style="display:flex;"><span>     <span style="color:#000080">&lt;/plugins&gt;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#000080">&lt;/pluginManagement&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>在添加插件的时候我们说到应该把通用的东西放到xxxManagement标签中，将变化的内容通过变量的形式抽取出来，完成最大程度的复用。</li>
+<li>所以我们对插件的配置也是通用的，所以也是改在Management中完成配置，并抽取变化。具体配置如下图，可能显得有些复杂。
+由于为了灵活性的需要，我们进行了多次变量取，这里我来详细解释下：</li>
+</ul>
+<ol>
+<li>首先<code>properties</code>标签中的大写的变量取值，意思为取得系统上下的属性，至于为什么要这么做呢？是因为为了让我们的镜像在运行是可以通过环境变量的形式对其进行修改优化。仔细看你会发现这些值都是有可能对于不同的硬件服务器有着完全不同的设定。避免了修改java内存及一些相关参数而重写打包镜像，也提供了一个修改的便捷渠道。</li>
+<li>接下来再看<code>env</code>标签,有没有觉得眼熟？这里是定义系统环境变量的地方，这里的定义与我们在<code>properties</code>标签中定义的名称一致,可以看到我们在这里有进行一次变量取值，为什么又是变量取值，而不是写死一个值呢？
+主要出于三点考虑：
+第一点是方便maven执行mvn clean package -Djvm.Xms=2G 通过命令行传递默认参数。
+第二点是为了方便具体业务通过在自己的pom重覆盖该参数完成默认参数的修改。
+第三点当然是为了支持多环境打包准备。</li>
+</ol>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">80
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">81
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">82
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">83
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">84
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">85
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">86
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">87
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;properties&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#000080">&lt;docker.jre&gt;</span>freemanliu/openjre<span style="color:#000080">&lt;/docker.jre&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#000080">&lt;docker.jre.version&gt;</span>1.8.0_171<span style="color:#000080">&lt;/docker.jre.version&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#000080">&lt;java.opts&gt;</span>
+</span></span><span style="display:flex;"><span>   -Dservice.name=${project.artifactId} \
+</span></span><span style="display:flex;"><span>   -XX:+UnlockExperimentalVMOptions \
+</span></span><span style="display:flex;"><span>   -Xms${JAVA_HEAP_XMS} \
+</span></span><span style="display:flex;"><span>   -Xmx${JAVA_HEAP_XMX} \
+</span></span><span style="display:flex;"><span>   -XX:CICompilerCount=${CI_COMPILER_COUNT} \
+</span></span><span style="display:flex;"><span>   -XX:G1NewSizePercent=${G1_NEW_SIZE_PERCENT} \
+</span></span><span style="display:flex;"><span>   -XX:G1MaxNewSizePercent=${G1_MAX_NEW_SIZE_PERCENT} \
+</span></span><span style="display:flex;"><span>   -DEUREKA_SERVER=${EUREKA_SERVER} \
+</span></span><span style="display:flex;"><span>   -Dspring.profiles.active=${spring.profile} \
+</span></span><span style="display:flex;"><span>   -Dspring.cloud.config.profile=${spring.profile} \
+</span></span><span style="display:flex;"><span>   -XX:+UseG1GC \
+</span></span><span style="display:flex;"><span>   -XX:+AggressiveOpts \
+</span></span><span style="display:flex;"><span>   -XX:+UseFastAccessorMethods \
+</span></span><span style="display:flex;"><span>   -XX:+UseStringDeduplication \
+</span></span><span style="display:flex;"><span>   -XX:+UseCompressedOops \
+</span></span><span style="display:flex;"><span>   -XX:+OptimizeStringConcat
+</span></span><span style="display:flex;"><span>   <span style="color:#000080">&lt;/java.opts&gt;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#000080">&lt;jvm.Xms&gt;</span>1G<span style="color:#000080">&lt;/jvm.Xms&gt;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#000080">&lt;jvm.Xmx&gt;</span>1G<span style="color:#000080">&lt;/jvm.Xmx&gt;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#000080">&lt;g1.new.size.percent&gt;</span>5<span style="color:#000080">&lt;/g1.new.size.percent&gt;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#000080">&lt;g1.max.size.percent&gt;</span>60<span style="color:#000080">&lt;/g1.max.size.percent&gt;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#000080">&lt;pushImage&gt;</span>true<span style="color:#000080">&lt;/pushImage&gt;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#000080">&lt;ci.compiler.count&gt;</span>8<span style="color:#000080">&lt;/ci.compiler.count&gt;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#000080">&lt;eureka.url&gt;</span>${prod.eureka}<span style="color:#000080">&lt;/eureka.url&gt;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#000080">&lt;spring.profile&gt;</span>test<span style="color:#000080">&lt;/spring.profile&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;properties&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;pluginManagement&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;plugins&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#000080">&lt;plugin&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#000080">&lt;groupId&gt;</span>com.spotify<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#000080">&lt;artifactId&gt;</span>docker-maven-plugin<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#000080">&lt;configuration&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;imageName&gt;</span>
+</span></span><span style="display:flex;"><span>              ${docker.repository}/${docker.registry.name}/${project.artifactId}:${git.commit.id.describe-short}
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;/imageName&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;registryUrl&gt;</span>${docker.repository}<span style="color:#000080">&lt;/registryUrl&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;workdir&gt;</span>/work<span style="color:#000080">&lt;/workdir&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;rm&gt;</span>true<span style="color:#000080">&lt;/rm&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;env&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#998;font-style:italic">&lt;!--关于G1的一些参数说明您可以从这里获取到 https://www.oracle.com/technetwork/cn/articles/java/g1gc-1984535-zhs.html --&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#998;font-style:italic">&lt;!--设置时区--&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#000080">&lt;TZ&gt;</span>Asia/Shanghai<span style="color:#000080">&lt;/TZ&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#998;font-style:italic">&lt;!--初始化堆大小--&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#000080">&lt;JAVA_HEAP_XMS&gt;</span>${jvm.Xms}<span style="color:#000080">&lt;/JAVA_HEAP_XMS&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#998;font-style:italic">&lt;!--jvm最大可使用的堆--&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#000080">&lt;JAVA_HEAP_XMX&gt;</span>${jvm.Xmx}<span style="color:#000080">&lt;/JAVA_HEAP_XMX&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#998;font-style:italic">&lt;!--设置要用作年轻代大小，最小值的堆百分比。默认值是 Java 堆的 5%，需要使用解锁实验性质的标志-XX:+UnlockExperimentalVMOptions--&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#000080">&lt;G1_NEW_SIZE_PERCENT&gt;</span>${g1.new.size.percent}<span style="color:#000080">&lt;/G1_NEW_SIZE_PERCENT&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#998;font-style:italic">&lt;!--设置要用作年轻代大小，最大值的堆百分比。默认值是 Java 堆的 60%，需要使用解锁实验性质的标志-XX:+UnlockExperimentalVMOptions--&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#000080">&lt;G1_MAX_NEW_SIZE_PERCENT&gt;</span>${g1.max.size.percent}<span style="color:#000080">&lt;/G1_MAX_NEW_SIZE_PERCENT&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#998;font-style:italic">&lt;!--调整编译线程的数目，我们服务器都是8core配置所以这里统一配置成8--&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#000080">&lt;CI_COMPILER_COUNT&gt;</span>${ci.compiler.count}<span style="color:#000080">&lt;/CI_COMPILER_COUNT&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#998;font-style:italic">&lt;!--eureka url 配置--&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#000080">&lt;EUREKA_SERVER&gt;</span>${eureka.url}<span style="color:#000080">&lt;/EUREKA_SERVER&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#000080">&lt;JAVA_OPTS&gt;</span>${java.opts}<span style="color:#000080">&lt;/JAVA_OPTS&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;/env&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;baseImage&gt;</span>${docker.jre}:${docker.jre.version}<span style="color:#000080">&lt;/baseImage&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;cmd&gt;</span>
+</span></span><span style="display:flex;"><span>              /sbin/tini java ${JAVA_OPTS} -jar ${project.build.finalName}.jar
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;/cmd&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#998;font-style:italic">&lt;!--是否推送image--&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;pushImage&gt;</span>${pushImage}<span style="color:#000080">&lt;/pushImage&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;resources&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#000080">&lt;resource&gt;</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#000080">&lt;directory&gt;</span>${project.build.directory}<span style="color:#000080">&lt;/directory&gt;</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#000080">&lt;include&gt;</span>${project.build.finalName}.jar<span style="color:#000080">&lt;/include&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#000080">&lt;/resource&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;/resources&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#998;font-style:italic">&lt;!--这里与你的配置的私服id一致--&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;serverId&gt;</span>aliyun-registry<span style="color:#000080">&lt;/serverId&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#000080">&lt;/configuration&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#000080">&lt;executions&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;execution&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#000080">&lt;phase&gt;</span>package<span style="color:#000080">&lt;/phase&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#000080">&lt;goals&gt;</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#000080">&lt;goal&gt;</span>build<span style="color:#000080">&lt;/goal&gt;</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#000080">&lt;/goals&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;/execution&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#000080">&lt;/executions&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#000080">&lt;/plugin&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;plugins&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/pluginManagement&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="多环境配置">多环境配置</h2>
+<ul>
+<li>完成了插件的配置和变量的抽取之后我们具体使用将十分的简单</li>
+<li>下面我贴出常见的一些profile</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;profiles&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;profile&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">&lt;!--高度灵活的profile--&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;id&gt;</span>docker<span style="color:#000080">&lt;/id&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;build&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;plugins&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;plugin&gt;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000080">&lt;groupId&gt;</span>org.apache.maven.plugins<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000080">&lt;artifactId&gt;</span>maven-shade-plugin<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;/plugin&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;plugin&gt;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000080">&lt;groupId&gt;</span>com.spotify<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000080">&lt;artifactId&gt;</span>docker-maven-plugin<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;/plugin&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;/plugins&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;/build&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/profile&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;profile&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">&lt;!--prod的profile--&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;id&gt;</span>prod<span style="color:#000080">&lt;/id&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;properties&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;base.docker.repository&gt;</span>${docker.registry}<span style="color:#000080">&lt;/base.docker.repository&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;eureka.url&gt;</span>${prod.eureka}<span style="color:#000080">&lt;/eureka.url&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;g1.new.size.percent&gt;</span>${g1.new.size.percent}<span style="color:#000080">&lt;/g1.new.size.percent&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;g1.max.size.percent&gt;</span>${g1.max.size.percent}<span style="color:#000080">&lt;/g1.max.size.percent&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;jvm.Xms&gt;</span>${prod.jvm.Xms}<span style="color:#000080">&lt;/jvm.Xms&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;jvm.Xmx&gt;</span>${prod.jvm.Xmx}<span style="color:#000080">&lt;/jvm.Xmx&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;pushImage&gt;</span>true<span style="color:#000080">&lt;/pushImage&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;spring.profile&gt;</span>prod<span style="color:#000080">&lt;/spring.profile&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;/properties&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;build&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;plugins&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;plugin&gt;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000080">&lt;groupId&gt;</span>org.apache.maven.plugins<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000080">&lt;artifactId&gt;</span>maven-shade-plugin<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;/plugin&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#998;font-style:italic">&lt;!--prod的默认激活git插件方便使用tag做为版本号--&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;plugin&gt;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000080">&lt;groupId&gt;</span>pl.project13.maven<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000080">&lt;artifactId&gt;</span>git-commit-id-plugin<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;/plugin&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;plugin&gt;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000080">&lt;groupId&gt;</span>com.spotify<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000080">&lt;artifactId&gt;</span>docker-maven-plugin<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;/plugin&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;/plugins&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;/build&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/profile&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;profile&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">&lt;!--test的profile--&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;id&gt;</span>test<span style="color:#000080">&lt;/id&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;properties&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;base.docker.repository&gt;</span>${test.docker.repository}<span style="color:#000080">&lt;/base.docker.repository&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;eureka.url&gt;</span>${test.eureka}<span style="color:#000080">&lt;/eureka.url&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;g1.new.size.percent&gt;</span>40<span style="color:#000080">&lt;/g1.new.size.percent&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;g1.max.size.percent&gt;</span>70<span style="color:#000080">&lt;/g1.max.size.percent&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;jvm.Xms&gt;</span>${test.jvm.Xms}<span style="color:#000080">&lt;/jvm.Xms&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;jvm.Xmx&gt;</span>${test.jvm.Xmx}<span style="color:#000080">&lt;/jvm.Xmx&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;pushImage&gt;</span>false<span style="color:#000080">&lt;/pushImage&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic">&lt;!--test环境直接指定dockerimage说的版本号为latest--&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;git.commit.id.describe-short&gt;</span>latest<span style="color:#000080">&lt;/git.commit.id.describe-short&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;spring.profile&gt;</span>test<span style="color:#000080">&lt;/spring.profile&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;/properties&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;build&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;plugins&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;plugin&gt;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000080">&lt;groupId&gt;</span>org.apache.maven.plugins<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000080">&lt;artifactId&gt;</span>maven-shade-plugin<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;/plugin&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;plugin&gt;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000080">&lt;groupId&gt;</span>com.spotify<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000080">&lt;artifactId&gt;</span>docker-maven-plugin<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;/plugin&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;/plugins&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;/build&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/profile&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/profiles&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="构建">构建</h2>
+<ul>
+<li>打包prod版本的</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mvn clean pacakge  -Pprod  
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>打包test版本的</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mvn clean pacakge  -Ptest
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>打包个性化的版本的</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mvn clean pacakge -Djvm.Xms<span style="color:#000;font-weight:bold">=</span>8G -Djvm.Xmx<span style="color:#000;font-weight:bold">=</span>8G  -Pdocker
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="检验">检验</h2>
+<ul>
+<li>如果你配置正确，你将会看到如下输出，如果你还开启的push，那么将看到push的日志</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>INFO<span style="color:#000;font-weight:bold">]</span> --- docker-maven-plugin:1.2.0:build <span style="color:#000;font-weight:bold">(</span>default<span style="color:#000;font-weight:bold">)</span> @ user-server ---
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>INFO<span style="color:#000;font-weight:bold">]</span> Using authentication suppliers: <span style="color:#000;font-weight:bold">[</span>ConfigFileRegistryAuthSupplier, FixedRegistryAuthSupplier<span style="color:#000;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>INFO<span style="color:#000;font-weight:bold">]</span> Copying /Users/freeman/IdeaProjects2/user-server/target/user-server.jar -&gt; /Users/freeman/IdeaProjects2/user-server/target/docker/user-server.jar
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>INFO<span style="color:#000;font-weight:bold">]</span> Building image hub.mayixiaoke.com/my/user-server:latest
+</span></span><span style="display:flex;"><span>Step 1/12 : FROM freemanliu/openjre:1.8.0_171_font
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> ---&gt; 753ecb9267d1
+</span></span><span style="display:flex;"><span>Step 2/12 : ENV CI_COMPILER_COUNT <span style="color:#099">8</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> ---&gt; Using cache
+</span></span><span style="display:flex;"><span> ---&gt; 93bebb3621d4
+</span></span><span style="display:flex;"><span>Step 3/12 : ENV EUREKA_SERVER <span style="color:#d14">&#34;-DEUREKA_SERVER=http://192.168.0.204:8761/eureka/&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> ---&gt; Running in 42d31fcd4a7d
+</span></span><span style="display:flex;"><span>Removing intermediate container 42d31fcd4a7d
+</span></span><span style="display:flex;"><span> ---&gt; c1e478140e99
+</span></span><span style="display:flex;"><span>Step 4/12 : ENV G1_MAX_NEW_SIZE_PERCENT <span style="color:#099">70</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> ---&gt; Running in 794778b524dc
+</span></span><span style="display:flex;"><span>Removing intermediate container 794778b524dc
+</span></span><span style="display:flex;"><span> ---&gt; 6cf5ff851174
+</span></span><span style="display:flex;"><span>Step 5/12 : ENV G1_NEW_SIZE_PERCENT <span style="color:#099">40</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> ---&gt; Running in 85592d62fe30
+</span></span><span style="display:flex;"><span>Removing intermediate container 85592d62fe30
+</span></span><span style="display:flex;"><span> ---&gt; 8b69e9c6371e
+</span></span><span style="display:flex;"><span>Step 6/12 : ENV JAVA_HEAP_XMS 450m
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> ---&gt; Running in 683b34295fec
+</span></span><span style="display:flex;"><span>Removing intermediate container 683b34295fec
+</span></span><span style="display:flex;"><span> ---&gt; 24917bf053e6
+</span></span><span style="display:flex;"><span>Step 7/12 : ENV JAVA_HEAP_XMX 2G
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> ---&gt; Running in 74ba3caadd4b
+</span></span><span style="display:flex;"><span>Removing intermediate container 74ba3caadd4b
+</span></span><span style="display:flex;"><span> ---&gt; d1bd5ba01b7d
+</span></span><span style="display:flex;"><span>Step 8/12 : ENV JAVA_OPTS -Dservice.name<span style="color:#000;font-weight:bold">=</span>user-server             -XX:+UnlockExperimentalVMOptions             -Xms<span style="color:#d14">${</span><span style="color:#008080">JAVA_HEAP_XMS</span><span style="color:#d14">}</span>             -Xmx<span style="color:#d14">${</span><span style="color:#008080">JAVA_HEAP_XMX</span><span style="color:#d14">}</span>             -XX:CICompilerCount<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">${</span><span style="color:#008080">CI_COMPILER_COUNT</span><span style="color:#d14">}</span>             -XX:G1NewSizePercent<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">${</span><span style="color:#008080">G1_NEW_SIZE_PERCENT</span><span style="color:#d14">}</span>             -XX:G1MaxNewSizePercent<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">${</span><span style="color:#008080">G1_MAX_NEW_SIZE_PERCENT</span><span style="color:#d14">}</span>             -DEUREKA_SERVER<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">${</span><span style="color:#008080">EUREKA_SERVER</span><span style="color:#d14">}</span>             -Dspring.profiles.active<span style="color:#000;font-weight:bold">=</span><span style="color:#0086b3">test</span>             -Dspring.cloud.config.profile<span style="color:#000;font-weight:bold">=</span><span style="color:#0086b3">test</span>             -XX:+UseG1GC             -XX:+AggressiveOpts             -XX:+UseFastAccessorMethods             -XX:+UseStringDeduplication             -XX:+UseCompressedOops             -XX:+OptimizeStringConcat
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> ---&gt; Running in 2b4e73c01ad7
+</span></span><span style="display:flex;"><span>Removing intermediate container 2b4e73c01ad7
+</span></span><span style="display:flex;"><span> ---&gt; 2fd9b3ffa0ad
+</span></span><span style="display:flex;"><span>Step 9/12 : ENV TZ Asia/Shanghai
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> ---&gt; Running in 85946bd9bb3c
+</span></span><span style="display:flex;"><span>Removing intermediate container 85946bd9bb3c
+</span></span><span style="display:flex;"><span> ---&gt; b588ab3d7e2c
+</span></span><span style="display:flex;"><span>Step 10/12 : WORKDIR /work
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> ---&gt; Running in a41a0545883f
+</span></span><span style="display:flex;"><span>Removing intermediate container a41a0545883f
+</span></span><span style="display:flex;"><span> ---&gt; 53c863bbcdbf
+</span></span><span style="display:flex;"><span>Step 11/12 : ADD user-server.jar .
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> ---&gt; a3cf23754886
+</span></span><span style="display:flex;"><span>Step 12/12 : CMD /sbin/tini java <span style="color:#d14">${</span><span style="color:#008080">JAVA_OPTS</span><span style="color:#d14">}</span> -jar user-server.jar
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> ---&gt; Running in c3a716574080
+</span></span><span style="display:flex;"><span>Removing intermediate container c3a716574080
+</span></span><span style="display:flex;"><span> ---&gt; 262898825ee2
+</span></span><span style="display:flex;"><span>ProgressMessage<span style="color:#000;font-weight:bold">{</span><span style="color:#008080">id</span><span style="color:#000;font-weight:bold">=</span>null, <span style="color:#008080">status</span><span style="color:#000;font-weight:bold">=</span>null, <span style="color:#008080">stream</span><span style="color:#000;font-weight:bold">=</span>null, <span style="color:#008080">error</span><span style="color:#000;font-weight:bold">=</span>null, <span style="color:#008080">progress</span><span style="color:#000;font-weight:bold">=</span>null, <span style="color:#008080">progressDetail</span><span style="color:#000;font-weight:bold">=</span>null<span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>Successfully built 262898825ee2
+</span></span><span style="display:flex;"><span>Successfully tagged hub.xxxx.com/my/user-server:latest
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>INFO<span style="color:#000;font-weight:bold">]</span> Built hub.xxxx.com/my/user-server:latest
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>INFO<span style="color:#000;font-weight:bold">]</span> ------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>INFO<span style="color:#000;font-weight:bold">]</span> BUILD SUCCESS
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>INFO<span style="color:#000;font-weight:bold">]</span> ------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>INFO<span style="color:#000;font-weight:bold">]</span> Total time:  26.332 s
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>INFO<span style="color:#000;font-weight:bold">]</span> Finished at:
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">[</span>INFO<span style="color:#000;font-weight:bold">]</span> ------------------------------------------------------------------------
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>如果你使用的cmd命令跟我一样，那么你还可以执行sh终端，查看我们的环境变量</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>docker run -it --rm hub.xxx.com/my/user-server:latest sh
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">echo</span> <span style="color:#008080">$JAVA_OPTS</span>
+</span></span><span style="display:flex;"><span>-Dservice.name<span style="color:#000;font-weight:bold">=</span>user-server -XX:+UnlockExperimentalVMOptions -Xms450M -Xmx2G -XX:CICompilerCount<span style="color:#000;font-weight:bold">=</span><span style="color:#099">8</span> -XX:G1NewSizePercent<span style="color:#000;font-weight:bold">=</span><span style="color:#099">5</span> -XX:G1MaxNewSizePercent<span style="color:#000;font-weight:bold">=</span><span style="color:#099">60</span> -DEUREKA_SERVER<span style="color:#000;font-weight:bold">=</span>-DEUREKA_SERVER<span style="color:#000;font-weight:bold">=</span>http://192.168.0.204:8761/eureka/ -Dspring.profiles.active<span style="color:#000;font-weight:bold">=</span>prod -Dspring.cloud.config.profile<span style="color:#000;font-weight:bold">=</span>prod -XX:+UseG1GC -XX:+AggressiveOpts -XX:+UseFastAccessorMethods -XX:+UseStringDeduplication -XX:+UseCompressedOops -XX:+OptimizeStringConcat
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>如果你感兴趣还可以这样</li>
+</ul>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>docker run -it --rm -e <span style="color:#008080">JAVA_HEAP_XMS</span><span style="color:#000;font-weight:bold">=</span>8G -e <span style="color:#008080">JAVA_HEAP_XMX</span><span style="color:#000;font-weight:bold">=</span>8G hub.xxx.com/my/user-server:latest sh
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">echo</span> <span style="color:#008080">$JAVA_OPTS</span>
+</span></span><span style="display:flex;"><span>-Dservice.name<span style="color:#000;font-weight:bold">=</span>user-server -XX:+UnlockExperimentalVMOptions -Xms4G -Xmx4G -XX:CICompilerCount<span style="color:#000;font-weight:bold">=</span><span style="color:#099">8</span> -XX:G1NewSizePercent<span style="color:#000;font-weight:bold">=</span><span style="color:#099">5</span> -XX:G1MaxNewSizePercent<span style="color:#000;font-weight:bold">=</span><span style="color:#099">60</span> -DEUREKA_SERVER<span style="color:#000;font-weight:bold">=</span>-DEUREKA_SERVER<span style="color:#000;font-weight:bold">=</span>http://192.168.0.204:8761/eureka/ -Dspring.profiles.active<span style="color:#000;font-weight:bold">=</span>prod -Dspring.cloud.config.profile<span style="color:#000;font-weight:bold">=</span>prod -XX:+UseG1GC -XX:+AggressiveOpts -XX:+UseFastAccessorMethods -XX:+UseStringDeduplication -XX:+UseCompressedOops -XX:+OptimizeStringConcat
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>思考：同理我们想要灵活的修改其他参数是不是一个流程呢？比如我要修改G1的G1NewSizePercent和G1MaxNewSizePercent。有几种方式呢？你觉得那种方式更优雅呢？</li>
+</ul>
+        </div>
+
+        
+<div class="post-archive">
+    <ul class="post-copyright">
+        <li><strong>原文作者：</strong><a rel="author" href="https://www.flysnow.org">青木</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://www.flysnow.org/posts/How-to-run-springcloud-in-docker/">https://www.flysnow.org/posts/How-to-run-springcloud-in-docker/</a></li>
+        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
+    </ul>
+</div>
+<br/>
+
+
+
+        
+
+<div class="post-archive">
+    <h2>See Also</h2>
+    <ul class="listing">
+        
+        <li><a href="/posts/Extended-spring-cloud-ribbon-supports-grayscale/">扩展spring-cloud-ribbon支持灰度</a></li>
+        
+        <li><a href="/posts/kubernetes-metrics-server/">kubernetes全自动弹性伸缩组件</a></li>
+        
+    </ul>
+</div>
+
+
+        <div class="post-meta meta-tags">
+            
+            <ul class="clearfix">
+                
+                <li><a href='/tags/docker'>docker</a></li>
+                
+                <li><a href='/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1'>微服务</a></li>
+                
+            </ul>
+            
+        </div>
+    </article>
+    
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "yourdiscussshortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    
+    
+    <div class="post bg-white">
+      <script src="https://utteranc.es/client.js"
+            repo= "your github repo"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+      </script>
+    </div>
+    
+    
+    
+
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2022 <a href="https://www.flysnow.org">青木的博客 By 青木</a>
+        
+    </div>
+    <br />
+    <div>
+        <div class="github-badge">
+            <a href="https://gohugo.io/" target="_black" rel="nofollow"><span class="badge-subject">Powered by</span><span class="badge-value bg-blue">Hugo</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://www.flysnow.org/" target="_black"><span class="badge-subject">Design by</span><span class="badge-value bg-brightgreen">青木</span></a>
+        </div>
+        <div class="github-badge">
+            <a href="https://github.com/flysnow-org/maupassant-hugo" target="_black"><span class="badge-subject">Theme</span><span class="badge-value bg-yellowgreen">Maupassant</span></a>
+        </div>
+    </div>
+</footer>
+
+
+    
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+    <script src='/js/douban.js'></script>
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='https://www.flysnow.org/search' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="https://www.flysnow.org">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+    
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="https://www.flysnow.org/posts/Spring-Boot-Operator-User-Guide/" title="使用Spring Boot Operator部署SpringBoot到K8S">使用Spring Boot Operator部署SpringBoot到K8S</a>
+    </li>
+    
+    <li>
+        <a href="https://www.flysnow.org/posts/Monitor-ETCD/" title="Prometheus Operator监控ETCD">Prometheus Operator监控ETCD</a>
+    </li>
+    
+    <li>
+        <a href="https://www.flysnow.org/posts/Monitor-springboot-microservices/" title="Prometheus Operator监控SpringCloud">Prometheus Operator监控SpringCloud</a>
+    </li>
+    
+    <li>
+        <a href="https://www.flysnow.org/posts/Customize-your-kube-prometheus/" title="优雅的使用Prometheus Operator">优雅的使用Prometheus Operator</a>
+    </li>
+    
+    <li>
+        <a href="https://www.flysnow.org/posts/Run-the-business-service-to-complete-the-service-call-using-Feign/" title="部署业务并使用Feign进行服务间调用（附带一部分源码分析）">部署业务并使用Feign进行服务间调用（附带一部分源码分析）</a>
+    </li>
+    
+    <li>
+        <a href="https://www.flysnow.org/posts/Run-mysql-on-kubernetes/" title="从部署mysql聊一聊有状态服务和PV及PVC">从部署mysql聊一聊有状态服务和PV及PVC</a>
+    </li>
+    
+    <li>
+        <a href="https://www.flysnow.org/posts/Run-distributed-trace-zipkin-in-kubernetes/" title="在kubernetes运行分布式追踪zipkin">在kubernetes运行分布式追踪zipkin</a>
+    </li>
+    
+    <li>
+        <a href="https://www.flysnow.org/posts/Run-the-configuration-hub-cluster-on-kubernetes/" title="在kubernetes上运行SpringCloud配置中心">在kubernetes上运行SpringCloud配置中心</a>
+    </li>
+    
+    <li>
+        <a href="https://www.flysnow.org/posts/Run-eureka-cluster-on-kubernetes/" title="在kubernetes上运行eureka集群">在kubernetes上运行eureka集群</a>
+    </li>
+    
+    <li>
+        <a href="https://www.flysnow.org/posts/Run-Spring-Cloud-Gateway-on-kubernetes-2/" title="在kubernetes上运行Spring Cloud Gateway（二）">在kubernetes上运行Spring Cloud Gateway（二）</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/categories/'>分类</a></h3>
+<ul class="widget-list">
+    
+    <li><a href="https://www.flysnow.org/categories/%E5%90%8E%E7%AB%AF/">后端 (1)</a></li>
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/tags/'>标签</a></h3>
+<div class="tagcloud">
+    
+    <a href="https://www.flysnow.org/tags/EFK/">EFK</a>
+    
+    <a href="https://www.flysnow.org/tags/Java/">Java</a>
+    
+    <a href="https://www.flysnow.org/tags/kubernetes/">kubernetes</a>
+    
+    <a href="https://www.flysnow.org/tags/Mysql/">Mysql</a>
+    
+    <a href="https://www.flysnow.org/tags/Prometheus/">Prometheus</a>
+    
+    <a href="https://www.flysnow.org/tags/SpringBoot/">SpringBoot</a>
+    
+    <a href="https://www.flysnow.org/tags/SpringCloud/">SpringCloud</a>
+    
+    <a href="https://www.flysnow.org/tags/SpringGateway/">SpringGateway</a>
+    
+    <a href="https://www.flysnow.org/tags/docker/">docker</a>
+    
+    <a href="https://www.flysnow.org/tags/elasticsearch/">elasticsearch</a>
+    
+    <a href="https://www.flysnow.org/tags/gitlab/">gitlab</a>
+    
+    <a href="https://www.flysnow.org/tags/hpa/">hpa</a>
+    
+    <a href="https://www.flysnow.org/tags/jvm/">jvm</a>
+    
+    <a href="https://www.flysnow.org/tags/kafka/">kafka</a>
+    
+    <a href="https://www.flysnow.org/tags/kubernetes/">kubernetes</a>
+    
+    <a href="https://www.flysnow.org/tags/metrics-server/">metrics-server</a>
+    
+    <a href="https://www.flysnow.org/tags/springclod/">springclod</a>
+    
+    <a href="https://www.flysnow.org/tags/zuul/">zuul</a>
+    
+    <a href="https://www.flysnow.org/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">异常处理</a>
+    
+    <a href="https://www.flysnow.org/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
+    
+    <a href="https://www.flysnow.org/tags/%E6%BA%90%E7%A0%81/">源码</a>
+    
+    <a href="https://www.flysnow.org/tags/%E7%9B%91%E6%8E%A7/">监控</a>
+    
+</div>
+    </section>
+
+    
+<section class="widget">
+    <h3 class="widget-title">友情链接</h3>
+    <ul class="widget-list">
+        
+        <li>
+            <a target="_blank" href="https://www.flysnow.org/" title="青木的博客">青木的博客</a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    <section class="widget">
+        <h3 class="widget-title">其它</h3>
+        <ul class="widget-list">
+            <li><a href="https://www.flysnow.org/index.xml">文章 RSS</a></li>
+        </ul>
+    </section>
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>源码 on 青木的博客</title>
+    <link>https://www.flysnow.org/tags/%E6%BA%90%E7%A0%81/</link>
+    <description>Recent content in 源码 on 青木的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 26 Nov 2018 23:19:17 +0000</lastBuildDate><atom:link href="https://www.flysnow.org/tags/%E6%BA%90%E7%A0%81/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Zuul源码分析(2)Filter分析</title>
+      <link>https://www.flysnow.org/posts/Zuul-processing-flow-and-business-extension-point-2/</link>
+      <pubDate>Mon, 26 Nov 2018 23:19:17 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/Zuul-processing-flow-and-business-extension-point-2/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+&lt;p&gt;在&lt;a href=&#34;https://qingmu.io/2018/11/15/Zuul-processing-flow-and-business-extension-point/&#34;&gt;前一篇&lt;/a&gt;文件中我们分析了zuul对Filter请求了不同的阶段划分了多个生命周期即FilterType。接下来我们继续分析每一个FilterType的具体的Filter有哪些，他们都干了什么。&lt;/p&gt;
+&lt;h1 id=&#34;zuulfilters运行流程图&#34;&gt;ZuulFilters运行流程图&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;前面我们分析完了zuul的一个生命周期，下面我们在来仔细的看一下每个生命周期具体使用到的Filter&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>Zuul源码分析(1)生命周期</title>
+      <link>https://www.flysnow.org/posts/Zuul-processing-flow-and-business-extension-point/</link>
+      <pubDate>Thu, 15 Nov 2018 23:19:17 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/posts/Zuul-processing-flow-and-business-extension-point/</guid>
+      <description>&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Zuul在&lt;code&gt;Spring Cloud Netfilx&lt;/code&gt; 体系中扮演着接入者网关的角色。&lt;/li&gt;
+&lt;li&gt;本质上来说Zuul本身就是一系列的filters, 可以类比Servlet框架的Filter。按照生命周期我们可以分为四种类型（pre,route,post,err）分别对应请求过程。你可以从&lt;code&gt;com.netflix.zuul.FilterProcessor&lt;/code&gt;类里面找到所有的生命周期处理。&lt;/li&gt;
+&lt;li&gt;为什么我们要去了解它？比如我们想在网关统一对用户进行鉴权，进行&lt;code&gt;JWT&lt;/code&gt;的解析和参数转换，比如我们想实现自己的httpClient，再比如我们想在后端业务微服务返回的结果内进行一些特别的处理，比如脱敏啊，比如去掉一些字段啊。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on 青木的博客</title>
+    <link>https://www.flysnow.org/tags/</link>
+    <description>Recent content in Tags on 青木的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 08 Apr 2020 16:00:09 +0000</lastBuildDate><atom:link href="https://www.flysnow.org/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>kubernetes</title>
+      <link>https://www.flysnow.org/tags/kubernetes/</link>
+      <pubDate>Wed, 08 Apr 2020 16:00:09 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/kubernetes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>SpringBoot</title>
+      <link>https://www.flysnow.org/tags/SpringBoot/</link>
+      <pubDate>Wed, 08 Apr 2020 16:00:09 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/SpringBoot/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Prometheus</title>
+      <link>https://www.flysnow.org/tags/Prometheus/</link>
+      <pubDate>Mon, 02 Sep 2019 14:04:35 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/Prometheus/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>SpringCloud</title>
+      <link>https://www.flysnow.org/tags/SpringCloud/</link>
+      <pubDate>Sun, 01 Sep 2019 22:18:47 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/SpringCloud/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Mysql</title>
+      <link>https://www.flysnow.org/tags/Mysql/</link>
+      <pubDate>Sun, 11 Aug 2019 22:25:50 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/Mysql/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>elasticsearch</title>
+      <link>https://www.flysnow.org/tags/elasticsearch/</link>
+      <pubDate>Thu, 01 Aug 2019 14:03:40 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/elasticsearch/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>EFK</title>
+      <link>https://www.flysnow.org/tags/EFK/</link>
+      <pubDate>Thu, 01 Aug 2019 14:01:31 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/EFK/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gitlab</title>
+      <link>https://www.flysnow.org/tags/gitlab/</link>
+      <pubDate>Mon, 22 Jul 2019 12:43:16 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/gitlab/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Java</title>
+      <link>https://www.flysnow.org/tags/Java/</link>
+      <pubDate>Sat, 20 Jul 2019 17:43:44 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/Java/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>SpringGateway</title>
+      <link>https://www.flysnow.org/tags/SpringGateway/</link>
+      <pubDate>Thu, 10 Jan 2019 17:50:05 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/SpringGateway/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>docker</title>
+      <link>https://www.flysnow.org/tags/docker/</link>
+      <pubDate>Mon, 17 Dec 2018 00:29:02 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>jvm</title>
+      <link>https://www.flysnow.org/tags/jvm/</link>
+      <pubDate>Mon, 17 Dec 2018 00:29:02 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/jvm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>zuul</title>
+      <link>https://www.flysnow.org/tags/zuul/</link>
+      <pubDate>Mon, 26 Nov 2018 23:19:17 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/zuul/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>微服务</title>
+      <link>https://www.flysnow.org/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/</link>
+      <pubDate>Mon, 26 Nov 2018 23:19:17 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>源码</title>
+      <link>https://www.flysnow.org/tags/%E6%BA%90%E7%A0%81/</link>
+      <pubDate>Mon, 26 Nov 2018 23:19:17 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/%E6%BA%90%E7%A0%81/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>监控</title>
+      <link>https://www.flysnow.org/tags/%E7%9B%91%E6%8E%A7/</link>
+      <pubDate>Tue, 13 Nov 2018 23:43:52 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/%E7%9B%91%E6%8E%A7/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>kafka</title>
+      <link>https://www.flysnow.org/tags/kafka/</link>
+      <pubDate>Sun, 21 Oct 2018 10:28:37 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/kafka/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>springclod</title>
+      <link>https://www.flysnow.org/tags/springclod/</link>
+      <pubDate>Mon, 20 Aug 2018 19:18:33 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/springclod/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>异常处理</title>
+      <link>https://www.flysnow.org/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</link>
+      <pubDate>Mon, 20 Aug 2018 19:18:33 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>hpa</title>
+      <link>https://www.flysnow.org/tags/hpa/</link>
+      <pubDate>Thu, 02 Aug 2018 12:02:42 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/hpa/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>metrics-server</title>
+      <link>https://www.flysnow.org/tags/metrics-server/</link>
+      <pubDate>Thu, 02 Aug 2018 12:02:42 +0000</pubDate>
+      
+      <guid>https://www.flysnow.org/tags/metrics-server/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
